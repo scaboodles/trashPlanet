@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -10,14 +11,10 @@ document.body.appendChild( renderer.domElement );
 
 const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-//scene.add( cube );
 
 const loader = new GLTFLoader();
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-
-const searchPlane = new THREE.Plane(new THREE.Vector3(0,0,1), 2);
 
 function onPointerMove( event: MouseEvent ) {
 
@@ -65,14 +62,20 @@ scene.add( light );
 
 camera.position.z = 5;
 
+const controls = new OrbitControls( camera, renderer.domElement );
+controls.update();
+
+// update mouse control buttons
+controls.mouseButtons = {
+    LEFT: null,
+    MIDDLE: THREE.MOUSE.DOLLY,
+    RIGHT: THREE.MOUSE.ROTATE
+}
 
 
 function animate() {
-    const vec = new THREE.Vector3();
-    raycaster.ray.intersectPlane(searchPlane, vec);
-    //console.log(vec);
-    //cube.rotation.x += 0.01;
-    //cube.rotation.y += 0.01;
+
+    controls.update();
 	renderer.render( scene, camera );
 }
 renderer.setAnimationLoop( animate );
