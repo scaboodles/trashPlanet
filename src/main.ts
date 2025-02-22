@@ -1,20 +1,23 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { loadModels } from './registry';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
+import { loadModels } from './registry';
 
-const renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
+const init = async () => {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 );
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
 
-const loader = new GLTFLoader();
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
+    const modelDict = await loadModels();
+    scene.add(modelDict.get("duck")!.obj);
+
+    const light = new THREE.AmbientLight( 0xffffff ); // soft white light
+    scene.add( light );
 
 function onPointerMove( event: MouseEvent ) {
 
@@ -77,7 +80,8 @@ function animate() {
 
     controls.update();
 	renderer.render( scene, camera );
-}
-renderer.setAnimationLoop( animate );
 
-window.addEventListener( 'mousedown', onPointerMove );
+
+}
+
+init();
