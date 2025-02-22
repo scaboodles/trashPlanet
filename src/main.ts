@@ -3,9 +3,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -44,7 +44,7 @@ function onPointerMove( event: MouseEvent ) {
 
 renderer.setClearColor(0xffffff);
 
-loader.load( '../assets/teapot/scene.gltf', function ( gltf ) {
+loader.load( '../assets/rubber_duck/scene.gltf', function ( gltf ) {
     //gltf.scene.scale.set(10.0, 10.0, 10.0);
 
     const box = new THREE.BoxHelper(gltf.scene, 0xff0000);

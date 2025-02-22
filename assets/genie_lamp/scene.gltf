@@ -1,0 +1,408 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 3612,
+      "max": [
+        22.640178680419922,
+        70.45841217041016,
+        72.8391342163086
+      ],
+      "min": [
+        -22.640178680419922,
+        -48.28541946411133,
+        0.03992486000061035
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 43344,
+      "componentType": 5126,
+      "count": 3612,
+      "max": [
+        1.0,
+        0.9999932050704956,
+        0.9999477863311768
+      ],
+      "min": [
+        -1.0,
+        -0.9999712705612183,
+        -0.9999989867210388
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 3612,
+      "max": [
+        1.0,
+        1.0,
+        0.9866557121276855,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -0.9999999403953552,
+        -0.9982424378395081,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 3612,
+      "max": [
+        0.9592437148094177,
+        0.9901895523071289
+      ],
+      "min": [
+        0.019999999552965164,
+        0.019999999552965164
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 17790,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 86688,
+      "componentType": 5126,
+      "count": 2632,
+      "max": [
+        5.599999904632568,
+        16.654741287231445,
+        41.40665817260742
+      ],
+      "min": [
+        -5.599999904632568,
+        -5.599999904632568,
+        -1.3303794860839844
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 118272,
+      "componentType": 5126,
+      "count": 2632,
+      "max": [
+        1.0,
+        1.0,
+        0.9999589920043945
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -0.9999296069145203
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 57792,
+      "componentType": 5126,
+      "count": 2632,
+      "max": [
+        0.9999226331710815,
+        0.9995937943458557,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -0.9977189898490906,
+        -0.999593198299408,
+        -0.9998703002929688,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 28896,
+      "componentType": 5126,
+      "count": 2632,
+      "max": [
+        0.8011045455932617,
+        0.6845883727073669
+      ],
+      "min": [
+        0.4003501534461975,
+        0.41809916496276855
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 71160,
+      "componentType": 5125,
+      "count": 12096,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "RafaelScopel (https://sketchfab.com/RafaelScopel)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/genie-lamp-1f517175aa1649e9baa72f964b938448",
+      "title": "Genie Lamp"
+    },
+    "generator": "Sketchfab-12.68.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 119544,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 49952,
+      "byteOffset": 119544,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 149856,
+      "byteOffset": 169496,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 99904,
+      "byteOffset": 319352,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 419256,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Lampada_baseColor.png"
+    },
+    {
+      "uri": "textures/Lampada_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/Lampada_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Lampada",
+      "normalTexture": {
+        "index": 2
+      },
+      "occlusionTexture": {
+        "index": 1
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        },
+        "roughnessFactor": 0.11
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Lamp_Lampada_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Lamp_chain_Lampada_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TANGENT": 7,
+            "TEXCOORD_0": 8
+          },
+          "indices": 9,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.005067130550741927,
+        -0.9999871850013733,
+        0.0,
+        0.0,
+        0.9999871850013733,
+        -0.005067130550741927,
+        0.0,
+        0.0,
+        -0.055708616971969646,
+        0.18478591740131378,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "lamp.fbx"
+    },
+    {
+      "children": [
+        3,
+        5
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4
+      ],
+      "matrix": [
+        -0.9999999999999887,
+        1.2246469849340659e-16,
+        -1.5099580265055077e-07,
+        0.0,
+        -1.5099580265055077e-07,
+        -4.440892098500626e-16,
+        0.9999999999999887,
+        0.0,
+        1.2246464555384738e-16,
+        1.0,
+        3.3306690738754696e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Lamp"
+    },
+    {
+      "mesh": 0,
+      "name": "Lamp_Lampada_0"
+    },
+    {
+      "children": [
+        6
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.7071067513842253,
+        -0.7071068109888684,
+        0.0,
+        0.0,
+        0.7071068109888684,
+        -0.7071067513842253,
+        0.0,
+        0.0,
+        42.51862716674805,
+        -8.976009368896484,
+        1.0
+      ],
+      "name": "Lamp_chain"
+    },
+    {
+      "mesh": 1,
+      "name": "Lamp_chain_Lampada_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    }
+  ]
+}
