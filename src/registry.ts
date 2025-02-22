@@ -13,6 +13,7 @@ export type LoadedObj = {
 }
 
 export type DynamicObj = {
+    obj: THREE.Object3D;
     velocity : THREE.Vector3;
     pos : THREE.Vector3;
     bake : boolean;
