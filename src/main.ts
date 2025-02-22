@@ -17,7 +17,6 @@ type SceneState={
     selectedObject: DynamicObj | null;
     composer: EffectComposer;
     outline_pass: OutlinePass;
-    sun: THREE.Object3D | null;
 }
 
 const raycaster = new THREE.Raycaster();
@@ -107,15 +106,13 @@ const init = async () => {
         selectedObject: null,
         composer: composer,
         outline_pass: outlinePass,
-        sun: null
     }
 
 
     const temp_sun_loader = new GLTFLoader();
     temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
-        state.sun = gltf.scene
-        console.log(gltf.scene.children);
         gltf.scene.position.set(100.0, 0.0, 0.0);
+        gltf.scene.userData.sun = true;
         scene.add(gltf.scene);
     }, undefined, function(error) {
         console.error(error);
@@ -135,14 +132,22 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
 
     raycaster.setFromCamera( state.pointer, state.camera );
     // calculate objects intersecting the picking ray
-	const intersects = raycaster.intersectObjects( state.scene.children );
+    const filtered: THREE.Object3D[] = [];
+    state.scene.children.forEach(child => {
+        if(!child.userData.sun){
+            filtered.push(child)
+        }
+    });
+    
+    console.log(filtered)
+	const intersects = raycaster.intersectObjects( filtered );
 
     state.outline_pass.selectedObjects = [];
 
     if(intersects.length > 0)
     {
         const mesh = intersects[0].object;
-        if(mesh.id != state.sun!.id)
+        if(!mesh.userData.sun)
         {
             state.outline_pass.selectedObjects = [mesh];
         }
