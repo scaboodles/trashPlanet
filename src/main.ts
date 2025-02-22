@@ -1,4 +1,8 @@
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { loadModels } from './registry';
+
 import { loadModels } from './registry';
 
 const init = async () => {
@@ -15,9 +19,69 @@ const init = async () => {
     const light = new THREE.AmbientLight( 0xffffff ); // soft white light
     scene.add( light );
 
-    camera.position.z = 5;
+function onPointerMove( event: MouseEvent ) {
 
-    renderer.render( scene, camera );
+	// calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+
+	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    raycaster.setFromCamera( pointer, camera );
+    // calculate objects intersecting the picking ray
+	const intersects = raycaster.intersectObjects( scene.children );
+
+	for ( let i = 0; i < intersects.length; i ++ ) {
+        console.log(intersects[i]);
+
+		const mesh = (intersects[ i ].object as THREE.Mesh);
+        if(Array.isArray(mesh.material)){
+            mesh.material[0].visible = false;
+        }else{
+            mesh.material.visible=false;
+        }
+	}
+
+}
+
+
+renderer.setClearColor(0xffffff);
+
+loader.load( '../assets/westminster_abbey/scene.gltf', function ( gltf ) {
+    //gltf.scene.scale.set(10.0, 10.0, 10.0);
+
+    const box = new THREE.BoxHelper(gltf.scene, 0xff0000);
+    scene.add(box);
+    
+    
+	scene.add( gltf.scene );
+
+}, undefined, function ( error ) {
+	console.error( error );
+} );
+
+const light = new THREE.AmbientLight( 0xffffff ); // soft white light
+scene.add( light );
+
+camera.position.z = 5;
+
+const controls = new OrbitControls( camera, renderer.domElement );
+controls.update();
+
+// update mouse control buttons
+controls.mouseButtons = {
+    LEFT: null,
+    MIDDLE: THREE.MOUSE.DOLLY,
+    RIGHT: THREE.MOUSE.ROTATE
+}
+
+
+function animate() {
+
+    controls.update();
+	renderer.render( scene, camera );
+
+
 }
 
 init();
