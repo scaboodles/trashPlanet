@@ -29,7 +29,7 @@ const init = async () => {
 
     const temp_sun_loader = new GLTFLoader();
     temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
-        console.log('got here');
+        gltf.scene.position.set(100.0, 0.0, 0.0);
         scene.add(gltf.scene);
     }, undefined, function(error) {
         console.error(error);
