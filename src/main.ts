@@ -44,7 +44,7 @@ function onPointerMove( event: MouseEvent ) {
 
 renderer.setClearColor(0xffffff);
 
-loader.load( '../assets/rubber_duck/scene.gltf', function ( gltf ) {
+loader.load( '../assets/westminster_abbey/scene.gltf', function ( gltf ) {
     //gltf.scene.scale.set(10.0, 10.0, 10.0);
 
     const box = new THREE.BoxHelper(gltf.scene, 0xff0000);

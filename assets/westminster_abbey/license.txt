@@ -1,0 +1,11 @@
+Model Information:
+* title:	Westminster Abbey
+* source:	https://sketchfab.com/3d-models/westminster-abbey-4412dbe28ec6406c9e4d21aaab099de3
+* author:	FUD-UJEP (https://sketchfab.com/FUD-UJEP)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Westminster Abbey" (https://sketchfab.com/3d-models/westminster-abbey-4412dbe28ec6406c9e4d21aaab099de3) by FUD-UJEP (https://sketchfab.com/FUD-UJEP) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
