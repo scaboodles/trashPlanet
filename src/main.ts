@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { DynamicObj, LoadedObj, loadModels } from './registry';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 
 type SceneState={
     scene: THREE.Scene;
@@ -25,6 +26,33 @@ const init = async () => {
 
     const modelDict = await loadModels();
     scene.add(modelDict.get("duck")!.obj);
+
+    const temp_sun_loader = new GLTFLoader();
+    temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
+        gltf.scene.position.set(100.0, 0.0, 0.0);
+        scene.add(gltf.scene);
+    }, undefined, function(error) {
+        console.error(error);
+    })
+
+    const cubemap_loader = new THREE.CubeTextureLoader();
+    var cubemap = cubemap_loader.load([
+        '../assets/skybox/right.png',
+        '../assets/skybox/left.png',
+        '../assets/skybox/top.png',
+        '../assets/skybox/bottom.png',
+        '../assets/skybox/front.png',
+        '../assets/skybox/back.png',
+    ]);
+
+    scene.background = cubemap;
+
+    const sunlight = new THREE.PointLight(0xffffff);
+    sunlight.position.set(1.0, 0.0, 0.0);
+    sunlight.decay = 0.0;
+    scene.add(sunlight);
+
+
 
     const light = new THREE.AmbientLight( 0xffffff ); // soft white light
     scene.add( light );
