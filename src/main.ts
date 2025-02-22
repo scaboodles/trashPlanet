@@ -1,14 +1,10 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { DynamicObj, LoadedObj, loadModels } from './registry';
+import { DynamicObj, loadModels, SceneState, spawnTrash } from './registry';
 
-type SceneState={
-    scene: THREE.Scene;
-    renderer: THREE.WebGLRenderer;
-    modelRegisty: Map<string, LoadedObj>;
-    pointer : THREE.Vector2;
-    camera: THREE.Camera;
-    selectedObject: DynamicObj | null;
+
+const getDynamic = (obj: THREE.Object3D, state: SceneState) : DynamicObj => {
+    return state.instancedObjects.filter((dynam) => dynam.obj.id == obj.id)[0];
 }
 
 const raycaster = new THREE.Raycaster();
@@ -24,7 +20,6 @@ const init = async () => {
     document.body.appendChild( renderer.domElement );
 
     const modelDict = await loadModels();
-    scene.add(modelDict.get("duck")!.obj);
 
     const light = new THREE.AmbientLight( 0xffffff ); // soft white light
     scene.add( light );
@@ -49,14 +44,17 @@ const init = async () => {
         pointer: new THREE.Vector2(),
         camera: camera,
         selectedObject: null,
+        instancedObjects: [],
     }
 
-    window.addEventListener( 'mousedown', (event) => onPointerMove(event, state) );
+    window.addEventListener( 'mousedown', (event) => onclickdown(event, state) );
 
     renderer.setAnimationLoop(() => animate(state));
 }
 
-function onPointerMove( event: MouseEvent, state: SceneState ) {
+function onclickdown( event: MouseEvent, state: SceneState ) {
+    spawnTrash(state);
+
 	// calculate pointer position in normalized device coordinates
 	// (-1 to +1) for both components
 	state.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -67,12 +65,7 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
 	const intersects = raycaster.intersectObjects( state.scene.children );
 
     if(intersects.length > 0){
-        const mesh = intersects[0].object as THREE.Mesh;
-        if(Array.isArray(mesh.material)){
-            mesh.material[0].visible = false;
-        }else{
-            mesh.material.visible=false;
-        }
+        state.selectedObject = getDynamic(intersects[0].object, state);
     }
 }
 

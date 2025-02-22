@@ -1,6 +1,16 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+export type SceneState={
+    scene: THREE.Scene;
+    renderer: THREE.WebGLRenderer;
+    modelRegisty: Map<string, LoadedObj>;
+    pointer : THREE.Vector2;
+    camera: THREE.Camera;
+    selectedObject: DynamicObj | null;
+    instancedObjects: DynamicObj[];
+}
+
 export type StaticObj = {
     path : string; // folder name
     mass : number; // arbitrary mass unit
@@ -15,8 +25,9 @@ export type LoadedObj = {
 export type DynamicObj = {
     obj: THREE.Object3D;
     velocity : THREE.Vector3;
-    pos : THREE.Vector3;
     bake : boolean;
+    mass : number; // arbitrary mass unit
+
 }
 
 export const modelRegistry: StaticObj[] = [
@@ -59,4 +70,18 @@ export const loadModels = async () : Promise<Map<string, LoadedObj>> => {
 
     await Promise.all(loadPromises);
     return loadedObjects;
+}
+
+export const spawnTrash = (state: SceneState) => {
+    const entriesArray = Array.from(state.modelRegisty.values());
+    const random = entriesArray[Math.floor(Math.random() * entriesArray.length)];
+    const dynam: DynamicObj = {
+        obj: random.obj.clone(),
+        mass: random.mass,
+        bake: false,
+        velocity: new THREE.Vector3(0,0,0),
+    }
+
+    state.instancedObjects.push(dynam);
+    state.scene.add(dynam.obj);
 }
