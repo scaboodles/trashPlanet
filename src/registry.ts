@@ -374,7 +374,7 @@ export const spawnTrash = (state: SceneState) => {
 
 
     const lvls = {
-        XL: 100000,
+        XL: 50000,
         L: 5000,
         M: 25,
         S: 0,
