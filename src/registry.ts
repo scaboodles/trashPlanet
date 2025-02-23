@@ -182,11 +182,11 @@ export const modelRegistryXLarge: StaticObj[] = [
         mass: 1000000,
         scale: [50,50,50]
     },
-    {
-        path: "moon",
-        mass: 1000000000,
-        scale: [1,1,1]
-    },
+    // {
+    //     path: "moon",
+    //     mass: 1000000000,
+    //     scale: [1,1,1]
+    // },
     {
         path: "mount_rushmore",
         mass: 200000,
@@ -361,7 +361,21 @@ export const spawnById = (state: SceneState, registry: Map<string, LoadedObj>, i
 }
 
 export const spawnTrash = (state: SceneState) => {
-    const entriesArray = Array.from(state.modelRegistySM.values());
+
+
+    let entriesArray;
+    
+    if(state.planet.mass > 20000){
+        entriesArray = Array.from(state.modelRegistyXLG.values());
+        entriesArray.push()
+    }else if (state.planet.mass > 10000){
+        entriesArray = Array.from(state.modelRegistyLG.values());
+    } else if (state.planet.mass > 3){
+        entriesArray = Array.from(state.modelRegistyMD.values());
+        
+    }else {
+        entriesArray = Array.from(state.modelRegistySM.values());
+    }
     const random = entriesArray[Math.floor(Math.random() * entriesArray.length)];
 
     const clone = random.obj.clone();

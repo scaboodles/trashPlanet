@@ -358,6 +358,7 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
                     // Update planet radius and planet group
                     state.planet.objects.add(item);
                     state.planet.mass += item.userData.meta.mass;
+                    
                 }
             });
         //}
