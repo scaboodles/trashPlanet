@@ -164,7 +164,7 @@ export const modelRegistryLarge: StaticObj[] = [
     },
     {
         path: 'abandonded_roller_coaster_cart',
-        mass: 3000,
+        mass: 600,
         scale: [1,1,1]
     },
 
@@ -367,20 +367,28 @@ export const spawnById = (state: SceneState, registry: Map<string, LoadedObj>, i
 
 export const spawnTrash = (state: SceneState) => {
 
-
-    let entriesArray;
+    const r1 = Math.floor(Math.random() * 5);
+    const r2 = Math.floor(Math.random() * 5);
     
-    if(state.planet.mass > 20000){
-        entriesArray = Array.from(state.modelRegistyXLG.values());
-        entriesArray.push()
-    }else if (state.planet.mass > 10000){
-        entriesArray = Array.from(state.modelRegistyLG.values());
-    } else if (state.planet.mass > 3){
-        entriesArray = Array.from(state.modelRegistyMD.values());
-        
-    }else {
-        entriesArray = Array.from(state.modelRegistySM.values());
+    let entriesArray, prevLevel;
+
+    if (state.planet.mass > 2000) {
+      [entriesArray, prevLevel] = [state.modelRegistyXLG, state.modelRegistyLG];
+      
+    } else if (state.planet.mass > 100) {
+      [entriesArray, prevLevel] = [state.modelRegistyLG, state.modelRegistyMD];
+    } else if (state.planet.mass > 25) {
+      [entriesArray, prevLevel] = [state.modelRegistyMD, state.modelRegistySM];
+    } else {
+      entriesArray = state.modelRegistySM;
     }
+    entriesArray = Array.from(entriesArray?.values() || []);
+    
+    if (prevLevel) {
+      const prevValues = Array.from(prevLevel.values());
+      entriesArray.push(prevValues[r1], prevValues[r2]);
+    }
+
     const random = entriesArray[Math.floor(Math.random() * entriesArray.length)];
 
     const clone = random.obj.clone();
