@@ -183,11 +183,6 @@ export const modelRegistryXLarge: StaticObj[] = [
         scale: [50,50,50]
     },
     {
-        path: "new_york_city._manhattan",
-        mass: 10000000,
-        scale: [1,1,1]
-    },
-    {
         path: "moon",
         mass: 1000000000,
         scale: [1,1,1]
