@@ -11,14 +11,17 @@ import { getParallaxCorrectNormal } from 'three/tsl';
 
 const raycaster = new THREE.Raycaster();
 
-const clip_radius = 100.0;
+let clip_radius_multiplier = 100.0;
+//let clip_radius = 1.0;
 var time_since_spawn = 0.0;
 var time_to_wait = 1.0;
+
+const grav_const = 6.67428 * 0.000001;
 
 const init = async () => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera.position.z = 5;
+    camera.position.z = 3.0;
 
 
     const renderer = new THREE.WebGLRenderer();
@@ -86,9 +89,6 @@ const init = async () => {
         RIGHT: THREE.MOUSE.ROTATE
     }
 
-    controls.minDistance = 2;
-    controls.maxDistance = 10;
-
     controls.update();
 
     const composer = new EffectComposer(renderer);
@@ -130,11 +130,12 @@ const init = async () => {
 
     let planet: Planet = {
         mass: teapot_template?.mass!,
+        //mass: 100000000,
         check_radius: 10.0,
+        radius: 1.0,
         objects: new THREE.Group()
     };
 
-    console.log(planet.mass);
     scene.add(starting_teapot!);
     planet.objects.add(starting_teapot!);
     scene.add(planet.objects);
@@ -152,12 +153,21 @@ const init = async () => {
         planet: planet,
         mousedown: false,
         dragTarget: new THREE.Vector3,
+        controls: controls,
 
         modelRegistySM: modelDictSM,
         modelRegistyMD: modelDictMD,
         modelRegistyLG: modelDictLG,
         modelRegistyXLG: modelDictXL
     }
+
+
+    state.controls.minDistance = 2;
+    let planet_box: THREE.Box3 = new THREE.Box3().setFromObject(state.planet.objects);
+    let planet_sphere: THREE.Sphere = new THREE.Sphere();
+    planet_box.getBoundingSphere(planet_sphere);
+    state.controls.maxDistance = 3.0 * planet_sphere.radius;
+    state.planet.radius = planet_sphere.radius;
 
     window.addEventListener( 'mousedown', (event) => onMouseDown(event, state) );
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
@@ -314,6 +324,8 @@ function animate(state: SceneState) {
     spawn_items(state);
     handle_physics(state, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
 
+    //state.planet.objects.rotation.y += 0.5 * state.time.delta;
+
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})
 }
@@ -345,6 +357,7 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
             item_size.multiplyScalar(-0.25);
             item_bbox.expandByVector(item_size);
 
+            // Check for collisions against all objects that are part of the planet
             state.planet.objects.children.forEach((planet_object) => {
                 var planet_bbox: THREE.Box3 = new THREE.Box3().setFromObject(planet_object);
                 let planet_item_size: THREE.Vector3 = new THREE.Vector3();
@@ -362,16 +375,34 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
                     // Update planet radius and planet group
                     state.planet.objects.add(item);
                     state.planet.mass += item.userData.meta.mass;
+
+                    // Three JS doesn't let you make a bounding sphere directly from a group so we have to do this instead :(
+                    let planet_box: THREE.Box3 = new THREE.Box3().setFromObject(state.planet.objects);
+                    let planet_sphere: THREE.Sphere = new THREE.Sphere();
+                    planet_box.getBoundingSphere(planet_sphere);
+
+                    state.controls.maxDistance = planet_sphere.radius * 3.0;
+                    state.planet.radius = planet_sphere.radius;
                 }
             });
         //}
 
+        // Get velocity vector pointing from position to origin
+        var grav_vel: THREE.Vector3 = item.position.clone().multiplyScalar(-1.0);
+        var grav_dist_sq = grav_vel.lengthSq();
+
+        var grav_strength = (grav_const * item.userData.meta.mass * state.planet.mass) / grav_dist_sq;
+        grav_vel = grav_vel.normalize().multiplyScalar(grav_strength);
+
+        item.userData.meta.velocity.add(grav_vel);
+
         item.rotation.x += item.userData.meta.angular_velocity.x * delta;
         item.rotation.y += item.userData.meta.angular_velocity.y * delta;
         item.rotation.z += item.userData.meta.angular_velocity.z * delta;
-        item.position.add(new THREE.Vector3(item.userData.meta.velocity.x * delta, item.userData.meta.velocity.y * delta, item.userData.meta.velocity.z * delta))
+        //item.position.add(new THREE.Vector3(item.userData.meta.velocity.x * delta, item.userData.meta.velocity.y * delta, item.userData.meta.velocity.z * delta))
+        item.position.add(item.userData.meta.velocity.clone().multiplyScalar(delta));
 
-        if(item.position.length() > clip_radius) {
+        if(item.position.length() > clip_radius_multiplier * state.planet.radius) {
             despawned_items.push(item);
         }
     });
