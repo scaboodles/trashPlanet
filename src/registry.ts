@@ -40,7 +40,7 @@ export type DynamicMetadata = {
     mass : number; // arbitrary mass unit
 }
 
-export const modelRegistry: StaticObj[] = [
+export const modelRegistrySmall: StaticObj[] = [
     {
         path: "teapot",
         mass: 1,
@@ -48,16 +48,26 @@ export const modelRegistry: StaticObj[] = [
     },
     {
         path: "duck",
-        mass: 2,
+        mass: .5,
         scale: [.7,.7,.7],
+    },
+    {
+        path: "stapler",
+        mass: 1.5,
+        scale: [.8,.8,.8],
+    },
+    {
+        path: "genie_lamp",
+        mass: 2,
+        scale: [.02,.02,.02],
     }
 ]
 
-export const loadModels = async () : Promise<Map<string, LoadedObj>> => {
+export const loadModelsSmall = async () : Promise<Map<string, LoadedObj>> => {
     const loadedObjects: Map<string, LoadedObj> = new Map();
     const loader = new GLTFLoader();
 
-    const loadPromises = modelRegistry.map(model =>
+    const loadPromises = modelRegistrySmall.map(model =>
         new Promise<void>((resolve, reject) => {
             loader.load(
                 `../assets/${model.path}/scene.gltf`,
@@ -80,6 +90,22 @@ export const loadModels = async () : Promise<Map<string, LoadedObj>> => {
 
     await Promise.all(loadPromises);
     return loadedObjects;
+}
+
+export const spawnById = (state: SceneState, id: string, pos: [number, number, number]) => {
+    const guy = state.modelRegisty.get(id);
+    const clone = guy?.obj.clone();
+
+    const meta : DynamicMetadata = {
+        mass: guy!.mass,
+        velocity: new THREE.Vector3(),
+        bake: false,
+    }
+
+    clone!.userData.meta = meta;
+    clone?.position.set(...pos);
+
+    state.scene.add(clone!);
 }
 
 export const spawnTrash = (state: SceneState) => {
