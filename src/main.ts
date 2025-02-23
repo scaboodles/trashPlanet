@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { loadModels, SceneState, spawnTrash } from './registry';
+import { loadModels, SceneState, spawnTrash, EngineTime } from './registry';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -9,6 +9,8 @@ import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 const raycaster = new THREE.Raycaster();
+
+const clip_radius = 100.0;
 
 const setupDragTest = (state: SceneState) => {
     const geometry = new THREE.SphereGeometry(.5, 32, 32);
@@ -88,6 +90,9 @@ const init = async () => {
         RIGHT: THREE.MOUSE.ROTATE
     }
 
+    controls.minDistance = 2;
+    controls.maxDistance = 10;
+
     controls.update();
 
     const composer = new EffectComposer(renderer);
@@ -119,6 +124,10 @@ const init = async () => {
     const outputPass = new OutputPass();
     composer.addPass(outputPass);
 
+    var engine_time: EngineTime = {
+        delta: 0.0,
+        previous_time: Date.now()
+    }
 
     const state: SceneState = {
         scene: scene,
@@ -129,6 +138,7 @@ const init = async () => {
         selectedObject: null,
         composer: composer,
         outline_pass: outlinePass,
+        time: engine_time
     }
     setupDragTest(state);
 
@@ -136,6 +146,10 @@ const init = async () => {
 
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
 
+    for(var i = 0; i < 100; i++)
+        {
+            spawnTrash(state);
+        }
     animate(state);
     //renderer.setAnimationLoop(() => animate(state));
 }
@@ -167,6 +181,7 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
             state.outline_pass.selectedObjects = [mesh];
         }
     }
+
 
     /*if(intersects.length > 0){
         const mesh = intersects[0].object as THREE.Mesh;
@@ -208,8 +223,35 @@ function onclickdown( event: MouseEvent, state: SceneState ) {
 }
 
 function animate(state: SceneState) {
+    var current_time = Date.now();
+    state.time.delta = (current_time - state.time.previous_time) * 0.001;
+    state.time.previous_time = current_time;
+
+    handle_physics(state.scene, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
+
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})
 }
 
 init();
+
+function handle_physics(scene: THREE.Scene, delta: number, objects: THREE.Object3D[])
+{
+    var despawned_items: THREE.Object3D[] = [];
+
+    objects.forEach((item) => {
+        var bbox = new THREE.Box3().setFromObject(item);
+        item.rotation.x += item.userData.meta.angular_velocity.x * delta;
+        item.rotation.y += item.userData.meta.angular_velocity.y * delta;
+        item.rotation.z += item.userData.meta.angular_velocity.z * delta;
+        item.position.add(new THREE.Vector3(item.userData.meta.velocity.x * delta, item.userData.meta.velocity.y * delta, item.userData.meta.velocity.z * delta))
+
+        if(item.position.length() > clip_radius) {
+            despawned_items.push(item);
+        }
+    });
+
+    despawned_items.forEach((item) => {
+        scene.remove(item);
+    });
+}
