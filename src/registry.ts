@@ -18,7 +18,7 @@ export type SceneState={
 export type Planet = {
     mass: number;
     check_radius: number;
-    objects: THREE.Object3D[];
+    objects: THREE.Group;
 };
 
 export type EngineTime = {

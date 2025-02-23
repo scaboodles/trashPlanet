@@ -4,7 +4,6 @@ import { loadModels, SceneState, spawnTrash, EngineTime, Planet } from './regist
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { BloomPass } from 'three/addons/postprocessing/BloomPass.js';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
@@ -135,15 +134,17 @@ const init = async () => {
     var teapot_template = modelDict.get('teapot');
     var starting_teapot = teapot_template?.obj.clone();
 
+
     let planet: Planet = {
         mass: teapot_template?.mass!,
         check_radius: 10.0,
-        objects: []
+        objects: new THREE.Group()
     };
 
     console.log(planet.mass);
     scene.add(starting_teapot!);
-    planet.objects.push(starting_teapot!);
+    planet.objects.add(starting_teapot!);
+    scene.add(planet.objects);
 
 
     const state: SceneState = {
@@ -249,9 +250,19 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
 
         //if(item.position.length() <= state.planet.check_radius)
         //{
-            var item_bbox: THREE.Box3 = new THREE.Box3().setFromObject(item);
-            state.planet.objects.forEach((planet_object) => {
+            let item_bbox: THREE.Box3 = new THREE.Box3().setFromObject(item);
+            let item_size: THREE.Vector3 = new THREE.Vector3();
+            item_bbox.getSize(item_size);
+            item_size.multiplyScalar(-0.25);
+            item_bbox.expandByVector(item_size);
+
+            state.planet.objects.children.forEach((planet_object) => {
                 var planet_bbox: THREE.Box3 = new THREE.Box3().setFromObject(planet_object);
+                let planet_item_size: THREE.Vector3 = new THREE.Vector3();
+                planet_bbox.getSize(planet_item_size);
+                planet_item_size.multiplyScalar(-0.25);
+                planet_bbox.expandByVector(planet_item_size);
+
                 if(item_bbox.intersectsBox(planet_bbox) && item.userData.meta.bake == false)
                 {
                     var zero_vec: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
@@ -260,7 +271,7 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
                     item.userData.meta.bake = true;
         
                     // Update planet radius and planet group
-                    state.planet.objects.push(item);
+                    state.planet.objects.add(item);
                     state.planet.mass += item.userData.meta.mass;
                 }
             });
