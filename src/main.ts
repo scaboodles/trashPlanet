@@ -382,11 +382,23 @@ function handle_physics (state: SceneState, delta: number, objects: THREE.Object
                     // Update planet radius and planet group
                     state.planet.objects.add(item);
                     state.planet.mass += item.userData.meta.mass;
+                    // update the progress bar
+                    // @ts-ignore
+                    let progress_bar = document.getElementById("progress_bar");
+                    if (progress_bar != null) {
+                        progress_bar.value += item.userData.meta.mass;
+                    }
 
                     // Three JS doesn't let you make a bounding sphere directly from a group so we have to do this instead :(
                     let planet_box: THREE.Box3 = new THREE.Box3().setFromObject(state.planet.objects);
                     let planet_sphere: THREE.Sphere = new THREE.Sphere();
                     planet_box.getBoundingSphere(planet_sphere);
+
+                    // update the radius:
+                    let mass_box = document.getElementById("radius_num");
+                    if (mass_box != null) {
+                        mass_box.innerHTML = planet_sphere.radius.toFixed(2).toString();
+                    }
 
                     state.controls.maxDistance = planet_sphere.radius * 3.0;
                     state.planet.radius = planet_sphere.radius;
