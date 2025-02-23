@@ -369,15 +369,25 @@ export const spawnTrash = (state: SceneState) => {
 
     const r1 = Math.floor(Math.random() * 5);
     const r2 = Math.floor(Math.random() * 5);
-    
+
+
+    const lvls = {
+        XL: 100000,
+        L: 5000,
+        M: 25,
+        S: 0,
+    };
+
+
+
     let entriesArray, prevLevel;
 
-    if (state.planet.mass > 2000) {
+    if (state.planet.mass > lvls.XL) {
       [entriesArray, prevLevel] = [state.modelRegistyXLG, state.modelRegistyLG];
       
-    } else if (state.planet.mass > 100) {
+    } else if (state.planet.mass > lvls.L) {
       [entriesArray, prevLevel] = [state.modelRegistyLG, state.modelRegistyMD];
-    } else if (state.planet.mass > 25) {
+    } else if (state.planet.mass > lvls.M) {
       [entriesArray, prevLevel] = [state.modelRegistyMD, state.modelRegistySM];
     } else {
       entriesArray = state.modelRegistySM;
