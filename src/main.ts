@@ -258,7 +258,7 @@ function animate(state: SceneState) {
     if(state.selectedObject){
         // draw line between moving and target
         const geometry = new THREE.BufferGeometry().setFromPoints([state.selectedObject.position, state.dragTarget]);
-        const material = new THREE.LineBasicMaterial({ color: 0x0000ff }); // Blue line
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff }); // Blue line
         const line = new THREE.Line(geometry, material);
         prevLine = line;
         state.scene.add(prevLine);
