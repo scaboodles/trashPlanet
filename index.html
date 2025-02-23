@@ -3,14 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" href="./style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>TrashPlanet</title>
     <style>
       body {border: none; margin: 0;}
     </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app" class="app"></div>
+    <div class="radius_container">
+      <div class="radius">radius: <span id="radius_num">1.0</span></div>
+    </div>
+    <div class="mass_container">
+      <div class="mass">
+        mass: <progress id="progress_bar" value="1" max="100"></progress>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
+
+    <!-- start page -->
+    <div id="start_page" class="start_page">
+      <h2>Trash Planet</h2>
+      <div class="start_button"><button class="button" onclick="wipe_div()">START</button></div>
+      <script>
+        // remove div of entire start page
+        function wipe_div() {
+          document.getElementById("start_page").remove();
+        }
+      </script>
+    </div>
+
   </body>
 </html>
