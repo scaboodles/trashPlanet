@@ -14,6 +14,8 @@ const clip_radius = 100.0;
 var time_since_spawn = 0.0;
 var time_to_wait = 1.0;
 
+const grav_const = 6.67428 * 0.00000000001;
+
 const init = async () => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -133,7 +135,6 @@ const init = async () => {
         objects: new THREE.Group()
     };
 
-    console.log(planet.mass);
     scene.add(starting_teapot!);
     planet.objects.add(starting_teapot!);
     scene.add(planet.objects);
@@ -310,6 +311,8 @@ function animate(state: SceneState) {
     spawn_items(state);
     handle_physics(state, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
 
+    //state.planet.objects.rotation.y += 0.5 * state.time.delta;
+
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})
 }
@@ -362,10 +365,22 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
             });
         //}
 
+        // Get velocity vector pointing from position to origin
+        var grav_vel: THREE.Vector3 = item.position.clone().multiplyScalar(-1.0);
+        var grav_dist_sq = grav_vel.lengthSq();
+
+        var grav_strength = (grav_const * item.userData.meta.mass * state.planet.mass) / grav_dist_sq;
+        grav_vel = grav_vel.normalize().multiplyScalar(grav_strength);
+
+        console.log(grav_strength);
+
+        item.userData.meta.velocity.add(grav_vel);
+
         item.rotation.x += item.userData.meta.angular_velocity.x * delta;
         item.rotation.y += item.userData.meta.angular_velocity.y * delta;
         item.rotation.z += item.userData.meta.angular_velocity.z * delta;
-        item.position.add(new THREE.Vector3(item.userData.meta.velocity.x * delta, item.userData.meta.velocity.y * delta, item.userData.meta.velocity.z * delta))
+        //item.position.add(new THREE.Vector3(item.userData.meta.velocity.x * delta, item.userData.meta.velocity.y * delta, item.userData.meta.velocity.z * delta))
+        item.position.add(item.userData.meta.velocity.clone().multiplyScalar(delta));
 
         if(item.position.length() > clip_radius) {
             despawned_items.push(item);
