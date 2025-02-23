@@ -1,0 +1,11 @@
+Model Information:
+* title:	Road Roller ARP 35
+* source:	https://sketchfab.com/3d-models/road-roller-arp-35-6a9b1acd83dd4463a2e839ba28ae1ded
+* author:	Lassi Kaukonen (https://sketchfab.com/thesidekick)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Road Roller ARP 35" (https://sketchfab.com/3d-models/road-roller-arp-35-6a9b1acd83dd4463a2e839ba28ae1ded) by Lassi Kaukonen (https://sketchfab.com/thesidekick) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

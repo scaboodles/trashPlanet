@@ -1,0 +1,11 @@
+Model Information:
+* title:	Prehistoric Planet: Tyrannosaurus Rex Model
+* source:	https://sketchfab.com/3d-models/prehistoric-planet-tyrannosaurus-rex-model-94184dfcc8e241ff9537bc4b23e7fdf5
+* author:	Draco (https://sketchfab.com/Draco120)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Prehistoric Planet: Tyrannosaurus Rex Model" (https://sketchfab.com/3d-models/prehistoric-planet-tyrannosaurus-rex-model-94184dfcc8e241ff9537bc4b23e7fdf5) by Draco (https://sketchfab.com/Draco120) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

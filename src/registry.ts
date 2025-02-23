@@ -6,7 +6,10 @@ const clip_radius = 100.0;
 export type SceneState={
     scene: THREE.Scene;
     renderer: THREE.WebGLRenderer;
-    modelRegisty: Map<string, LoadedObj>;
+    modelRegistySM: Map<string, LoadedObj>;
+    modelRegistyMD: Map<string, LoadedObj>;
+    modelRegistyLG: Map<string, LoadedObj>;
+    modelRegistyXLG: Map<string, LoadedObj>;
     pointer : THREE.Vector2;
     camera: THREE.Camera;
     selectedObject: THREE.Object3D | null;
@@ -14,6 +17,8 @@ export type SceneState={
     outline_pass: OutlinePass;
     time: EngineTime;
     planet: Planet;
+    mousedown: boolean;
+    dragTarget: THREE.Vector3;
 }
 export type Planet = {
     mass: number;
@@ -52,7 +57,7 @@ export type DynamicMetadata = {
     angular_velocity: THREE.Vector3;
 }
 
-export const modelRegistry: StaticObj[] = [
+export const modelRegistrySmall: StaticObj[] = [
     {
         path: "teapot",
         mass: 1,
@@ -60,20 +65,99 @@ export const modelRegistry: StaticObj[] = [
     },
     {
         path: "duck",
-        mass: 2,
+        mass: .5,
         scale: [.7,.7,.7],
+    },
+    {
+        path: "stapler",
+        mass: 1.5,
+        scale: [.8,.8,.8],
+    },
+    {
+        path: "genie_lamp",
+        mass: 2,
+        scale: [.02,.02,.02],
+    },
+    {
+        path: "head_from_a_bust_of_hadrian",
+        mass: 4,
+        scale: [8,8,8],
+    },
+    {
+        path: 'free_model_old_rusty_frying_pan',
+        mass: 4,
+        scale: [.1,.1,.1],
+    },
+]
+
+export const modelRegistryMed: StaticObj[] = [
+    {
+        path: 'ecorche_-_skeleton',
+        mass: 100,
+        scale: [.1,.1,.1]
+    },
+    {
+        path: 'russian_stove',
+        mass:210,
+        scale: [4,4,4]
+    },
+    {
+        path: 'rusty_old_fridge',
+        mass:330,
+        scale:[4.5,4.5,4.5]
+    },
+    {
+        path: 'retro_display_fridge',
+        mass:220,
+        scale:[2.5,2.5,2.5]
+    },
+    {
+        path: "road_roller_arp_35",
+        mass: 250,
+        scale: [1.5,1.5,1.5]
+    },
+    {
+        path: "destroyed_bus_01",
+        mass: 1500,
+        scale: [2,2,2]
     }
 ]
 
-export const loadModels = async () : Promise<Map<string, LoadedObj>> => {
+export const modelRegistryLarge: StaticObj[] = [
+]
+
+export const modelRegistryXLarge: StaticObj[] = [
+    {
+        path: "statue_of_liberty",
+        mass: 150000,
+        scale: [10,10,10]
+    },
+    {
+        path: "eiffel_tower",
+        mass: 200000,
+        scale: [23,23,23]
+    },
+    {
+        path: "westminster_abbey",
+        mass: 1000000,
+        scale: [50,50,50]
+    },
+]
+
+export const loadModelsSmall = async () : Promise<Map<string, LoadedObj>> => {
     const loadedObjects: Map<string, LoadedObj> = new Map();
     const loader = new GLTFLoader();
 
-    const loadPromises = modelRegistry.map(model =>
+    const loadPromises = modelRegistrySmall.map(model =>
         new Promise<void>((resolve, reject) => {
             loader.load(
                 `../assets/${model.path}/scene.gltf`,
                 (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
                     gltf.scene.scale.set(...model.scale);
                     loadedObjects.set(model.path, {
                         obj: gltf.scene,
@@ -94,8 +178,134 @@ export const loadModels = async () : Promise<Map<string, LoadedObj>> => {
     return loadedObjects;
 }
 
+export const loadModelsMed = async () : Promise<Map<string, LoadedObj>> => {
+    const loadedObjects: Map<string, LoadedObj> = new Map();
+    const loader = new GLTFLoader();
+
+    const loadPromises = modelRegistryMed.map(model =>
+        new Promise<void>((resolve, reject) => {
+            loader.load(
+                `../assets/${model.path}/scene.gltf`,
+                (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
+                    gltf.scene.scale.set(...model.scale);
+                    loadedObjects.set(model.path, {
+                        obj: gltf.scene,
+                        mass: model.mass
+                    });
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading model ${model.path}:`, error);
+                    reject(error);
+                }
+            );
+        })
+    );
+
+    await Promise.all(loadPromises);
+    return loadedObjects;
+}
+
+export const loadModelsLarge = async () : Promise<Map<string, LoadedObj>> => {
+    const loadedObjects: Map<string, LoadedObj> = new Map();
+    const loader = new GLTFLoader();
+
+    const loadPromises = modelRegistryLarge.map(model =>
+        new Promise<void>((resolve, reject) => {
+            loader.load(
+                `../assets/${model.path}/scene.gltf`,
+                (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
+                    gltf.scene.scale.set(...model.scale);
+                    loadedObjects.set(model.path, {
+                        obj: gltf.scene,
+                        mass: model.mass
+                    });
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading model ${model.path}:`, error);
+                    reject(error);
+                }
+            );
+        })
+    );
+
+    await Promise.all(loadPromises);
+    return loadedObjects;
+}
+
+export const loadModelsXLarge = async () : Promise<Map<string, LoadedObj>> => {
+    const loadedObjects: Map<string, LoadedObj> = new Map();
+    const loader = new GLTFLoader();
+
+    const loadPromises = modelRegistryXLarge.map(model =>
+        new Promise<void>((resolve, reject) => {
+            loader.load(
+                `../assets/${model.path}/scene.gltf`,
+                (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
+                    gltf.scene.scale.set(...model.scale);
+                    loadedObjects.set(model.path, {
+                        obj: gltf.scene,
+                        mass: model.mass
+                    });
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading model ${model.path}:`, error);
+                    reject(error);
+                }
+            );
+        })
+    );
+
+    await Promise.all(loadPromises);
+    return loadedObjects;
+}
+
+export const spawnById = (state: SceneState, registry: Map<string, LoadedObj>, id: string, pos: [number, number, number]) => {
+    const guy = registry.get(id);
+    const clone = guy?.obj.clone();
+
+    const meta : DynamicMetadata = {
+        mass: guy!.mass,
+        velocity: new THREE.Vector3(),
+        bake: false,
+    }
+
+    const group = new THREE.Group();
+    group.add(clone!);
+    
+    const box = new THREE.Box3().setFromObject(clone!);
+    const center = box.getCenter(new THREE.Vector3());
+    
+    // offset model inside group
+    clone!.position.sub(center);
+    group.position.set(...pos)
+    group.userData.meta = meta
+    
+    state.scene.add(group);
+}
+
 export const spawnTrash = (state: SceneState) => {
-    const entriesArray = Array.from(state.modelRegisty.values());
+    const entriesArray = Array.from(state.modelRegistySM.values());
     const random = entriesArray[Math.floor(Math.random() * entriesArray.length)];
 
 
@@ -108,20 +318,28 @@ export const spawnTrash = (state: SceneState) => {
         angular_velocity: new THREE.Vector3(Math.random() * 2.0, Math.random() * 2.0, Math.random() * 2.0)
     }
 
+
+    const phi = (Math.random() * Math.PI) - (Math.PI / 2);
+    const theta = Math.random() * Math.PI * 2;
+    const magnitude = Math.random() * clip_radius;
+
+    const group = new THREE.Group();
+    group.add(clone);
     
+    const box = new THREE.Box3().setFromObject(clone);
+    const center = box.getCenter(new THREE.Vector3());
+    
+    // offset model inside group
+    clone.position.sub(center);
+    
+    group.userData.meta = meta
+    group.position.x = magnitude * Math.cos(theta) * Math.cos(phi);
+    group.position.y = magnitude * Math.sin(theta) * Math.cos(phi);
+    group.position.z = magnitude * Math.sin(phi);
 
-    clone.userData.meta = meta;
-
-    var phi = (Math.random() * Math.PI) - (Math.PI / 2);
-    var theta = Math.random() * Math.PI * 2;
-    var magnitude = Math.random() * clip_radius;
-
-    clone.position.x = magnitude * Math.cos(theta) * Math.cos(phi);
-    clone.position.y = magnitude * Math.sin(theta) * Math.cos(phi);
-    clone.position.z = magnitude * Math.sin(phi);
-
-    clone.rotation.x = Math.random() * 2 * Math.PI;
-    clone.rotation.y = Math.random() * 2 * Math.PI;
-    clone.rotation.z = Math.random() * 2 * Math.PI;
-    state.scene.add(clone);
+    group.rotation.x = Math.random() * 2 * Math.PI;
+    group.rotation.y = Math.random() * 2 * Math.PI;
+    group.rotation.z = Math.random() * 2 * Math.PI;  
+  
+    state.scene.add(group);
 }
