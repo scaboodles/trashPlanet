@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { loadModels, SceneState, spawnTrash, EngineTime } from './registry';
+import { loadModels, SceneState, spawnTrash, EngineTime, Planet } from './registry';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -11,6 +11,9 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 const raycaster = new THREE.Raycaster();
 
 const clip_radius = 100.0;
+var time_since_spawn = 0.0;
+var time_to_wait = 1.0;
+
 
 const setupDragTest = (state: SceneState) => {
     const geometry = new THREE.SphereGeometry(.5, 32, 32);
@@ -129,6 +132,20 @@ const init = async () => {
         previous_time: Date.now()
     }
 
+    var teapot_template = modelDict.get('teapot');
+    var starting_teapot = teapot_template?.obj.clone();
+
+    let planet: Planet = {
+        mass: teapot_template?.mass!,
+        check_radius: 10.0,
+        objects: []
+    };
+
+    console.log(planet.mass);
+    scene.add(starting_teapot!);
+    planet.objects.push(starting_teapot!);
+
+
     const state: SceneState = {
         scene: scene,
         renderer: renderer,
@@ -138,7 +155,8 @@ const init = async () => {
         selectedObject: null,
         composer: composer,
         outline_pass: outlinePass,
-        time: engine_time
+        time: engine_time,
+        planet: planet
     }
     setupDragTest(state);
 
@@ -146,10 +164,6 @@ const init = async () => {
 
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
 
-    for(var i = 0; i < 100; i++)
-        {
-            spawnTrash(state);
-        }
     animate(state);
     //renderer.setAnimationLoop(() => animate(state));
 }
@@ -161,36 +175,16 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
 	state.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
     raycaster.setFromCamera( state.pointer, state.camera );
-    // calculate objects intersecting the picking ray
-    const filtered: THREE.Object3D[] = [];
-    state.scene.children.forEach(child => {
-        if(!child.userData.sun){
-            filtered.push(child)
-        }
-    });
     
-	const intersects = raycaster.intersectObjects( filtered );
+	const intersects = raycaster.intersectObjects( state.scene.children.filter((child) => { return child.userData.meta}) );
 
     state.outline_pass.selectedObjects = [];
 
     if(intersects.length > 0)
     {
         const mesh = intersects[0].object;
-        if(!mesh.userData.sun)
-        {
-            state.outline_pass.selectedObjects = [mesh];
-        }
+        state.outline_pass.selectedObjects = [mesh];
     }
-
-
-    /*if(intersects.length > 0){
-        const mesh = intersects[0].object as THREE.Mesh;
-        if(Array.isArray(mesh.material)){
-            state.outline_pass.selectedObjects = [mesh];
-        }else{
-            state.outline_pass.selectedObjects = [mesh];
-        }
-    }*/
 }
 
 function onclickdown( event: MouseEvent, state: SceneState ) {
@@ -227,7 +221,8 @@ function animate(state: SceneState) {
     state.time.delta = (current_time - state.time.previous_time) * 0.001;
     state.time.previous_time = current_time;
 
-    handle_physics(state.scene, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
+    spawn_items(state);
+    handle_physics(state, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
 
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})
@@ -235,12 +230,42 @@ function animate(state: SceneState) {
 
 init();
 
-function handle_physics(scene: THREE.Scene, delta: number, objects: THREE.Object3D[])
+function spawn_items(state: SceneState)
+{
+    time_since_spawn += state.time.delta;
+
+    if(time_since_spawn > time_to_wait) {
+        time_since_spawn = 0.0;
+        time_to_wait = Math.random();
+        spawnTrash(state);
+    }
+}
+
+function handle_physics(state: SceneState, delta: number, objects: THREE.Object3D[])
 {
     var despawned_items: THREE.Object3D[] = [];
 
     objects.forEach((item) => {
-        var bbox = new THREE.Box3().setFromObject(item);
+
+        //if(item.position.length() <= state.planet.check_radius)
+        //{
+            var item_bbox: THREE.Box3 = new THREE.Box3().setFromObject(item);
+            state.planet.objects.forEach((planet_object) => {
+                var planet_bbox: THREE.Box3 = new THREE.Box3().setFromObject(planet_object);
+                if(item_bbox.intersectsBox(planet_bbox) && item.userData.meta.bake == false)
+                {
+                    var zero_vec: THREE.Vector3 = new THREE.Vector3(0.0, 0.0, 0.0);
+                    item.userData.meta.velocity = zero_vec;
+                    item.userData.meta.angular_velocity = zero_vec;
+                    item.userData.meta.bake = true;
+        
+                    // Update planet radius and planet group
+                    state.planet.objects.push(item);
+                    state.planet.mass += item.userData.meta.mass;
+                }
+            });
+        //}
+
         item.rotation.x += item.userData.meta.angular_velocity.x * delta;
         item.rotation.y += item.userData.meta.angular_velocity.y * delta;
         item.rotation.z += item.userData.meta.angular_velocity.z * delta;
@@ -252,6 +277,6 @@ function handle_physics(scene: THREE.Scene, delta: number, objects: THREE.Object
     });
 
     despawned_items.forEach((item) => {
-        scene.remove(item);
+        state.scene.remove(item);
     });
 }

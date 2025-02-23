@@ -13,7 +13,13 @@ export type SceneState={
     composer: EffectComposer;
     outline_pass: OutlinePass;
     time: EngineTime;
+    planet: Planet;
 }
+export type Planet = {
+    mass: number;
+    check_radius: number;
+    objects: THREE.Object3D[];
+};
 
 export type EngineTime = {
     delta: number;
