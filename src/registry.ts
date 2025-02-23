@@ -5,7 +5,10 @@ import { EffectComposer, OutlinePass } from 'three/examples/jsm/Addons.js';
 export type SceneState={
     scene: THREE.Scene;
     renderer: THREE.WebGLRenderer;
-    modelRegisty: Map<string, LoadedObj>;
+    modelRegistySM: Map<string, LoadedObj>;
+    modelRegistyMD: Map<string, LoadedObj>;
+    modelRegistyLG: Map<string, LoadedObj>;
+    modelRegistyXLG: Map<string, LoadedObj>;
     pointer : THREE.Vector2;
     camera: THREE.Camera;
     selectedObject: THREE.Object3D | null;
@@ -60,7 +63,71 @@ export const modelRegistrySmall: StaticObj[] = [
         path: "genie_lamp",
         mass: 2,
         scale: [.02,.02,.02],
+    },
+    {
+        path: "head_from_a_bust_of_hadrian",
+        mass: 4,
+        scale: [8,8,8],
+    },
+    {
+        path: 'free_model_old_rusty_frying_pan',
+        mass: 4,
+        scale: [.1,.1,.1],
+    },
+]
+
+export const modelRegistryMed: StaticObj[] = [
+    {
+        path: 'ecorche_-_skeleton',
+        mass: 100,
+        scale: [.1,.1,.1]
+    },
+    {
+        path: 'russian_stove',
+        mass:210,
+        scale: [4,4,4]
+    },
+    {
+        path: 'rusty_old_fridge',
+        mass:330,
+        scale:[4.5,4.5,4.5]
+    },
+    {
+        path: 'retro_display_fridge',
+        mass:220,
+        scale:[2.5,2.5,2.5]
+    },
+    {
+        path: "road_roller_arp_35",
+        mass: 250,
+        scale: [1.5,1.5,1.5]
+    },
+    {
+        path: "destroyed_bus_01",
+        mass: 1500,
+        scale: [2,2,2]
     }
+]
+
+export const modelRegistryLarge: StaticObj[] = [
+]
+
+export const modelRegistryXLarge: StaticObj[] = [
+    {
+        path: "statue_of_liberty",
+        mass: 150000,
+        scale: [10,10,10]
+    },
+    {
+        path: "eiffel_tower",
+        mass: 200000,
+        scale: [23,23,23]
+    },
+    {
+        path: "westminster_abbey",
+        mass: 1000000,
+        scale: [50,50,50]
+    },
 ]
 
 export const loadModelsSmall = async () : Promise<Map<string, LoadedObj>> => {
@@ -72,6 +139,11 @@ export const loadModelsSmall = async () : Promise<Map<string, LoadedObj>> => {
             loader.load(
                 `../assets/${model.path}/scene.gltf`,
                 (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
                     gltf.scene.scale.set(...model.scale);
                     loadedObjects.set(model.path, {
                         obj: gltf.scene,
@@ -92,8 +164,110 @@ export const loadModelsSmall = async () : Promise<Map<string, LoadedObj>> => {
     return loadedObjects;
 }
 
-export const spawnById = (state: SceneState, id: string, pos: [number, number, number]) => {
-    const guy = state.modelRegisty.get(id);
+export const loadModelsMed = async () : Promise<Map<string, LoadedObj>> => {
+    const loadedObjects: Map<string, LoadedObj> = new Map();
+    const loader = new GLTFLoader();
+
+    const loadPromises = modelRegistryMed.map(model =>
+        new Promise<void>((resolve, reject) => {
+            loader.load(
+                `../assets/${model.path}/scene.gltf`,
+                (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
+                    gltf.scene.scale.set(...model.scale);
+                    loadedObjects.set(model.path, {
+                        obj: gltf.scene,
+                        mass: model.mass
+                    });
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading model ${model.path}:`, error);
+                    reject(error);
+                }
+            );
+        })
+    );
+
+    await Promise.all(loadPromises);
+    return loadedObjects;
+}
+
+export const loadModelsLarge = async () : Promise<Map<string, LoadedObj>> => {
+    const loadedObjects: Map<string, LoadedObj> = new Map();
+    const loader = new GLTFLoader();
+
+    const loadPromises = modelRegistryLarge.map(model =>
+        new Promise<void>((resolve, reject) => {
+            loader.load(
+                `../assets/${model.path}/scene.gltf`,
+                (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
+                    gltf.scene.scale.set(...model.scale);
+                    loadedObjects.set(model.path, {
+                        obj: gltf.scene,
+                        mass: model.mass
+                    });
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading model ${model.path}:`, error);
+                    reject(error);
+                }
+            );
+        })
+    );
+
+    await Promise.all(loadPromises);
+    return loadedObjects;
+}
+
+export const loadModelsXLarge = async () : Promise<Map<string, LoadedObj>> => {
+    const loadedObjects: Map<string, LoadedObj> = new Map();
+    const loader = new GLTFLoader();
+
+    const loadPromises = modelRegistryXLarge.map(model =>
+        new Promise<void>((resolve, reject) => {
+            loader.load(
+                `../assets/${model.path}/scene.gltf`,
+                (gltf) => {
+                    gltf.scene.traverse((child) => {
+                        if (child instanceof THREE.Mesh) {
+                            child.scale.set(1, 1, 1);
+                        }
+                    });
+                    gltf.scene.scale.set(...model.scale);
+                    loadedObjects.set(model.path, {
+                        obj: gltf.scene,
+                        mass: model.mass
+                    });
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    console.error(`Error loading model ${model.path}:`, error);
+                    reject(error);
+                }
+            );
+        })
+    );
+
+    await Promise.all(loadPromises);
+    return loadedObjects;
+}
+
+export const spawnById = (state: SceneState, registry: Map<string, LoadedObj>, id: string, pos: [number, number, number]) => {
+    const guy = registry.get(id);
     const clone = guy?.obj.clone();
 
     const meta : DynamicMetadata = {
@@ -102,14 +276,22 @@ export const spawnById = (state: SceneState, id: string, pos: [number, number, n
         bake: false,
     }
 
-    clone!.userData.meta = meta;
-    clone?.position.set(...pos);
-
-    state.scene.add(clone!);
+    const group = new THREE.Group();
+    group.add(clone!);
+    
+    const box = new THREE.Box3().setFromObject(clone!);
+    const center = box.getCenter(new THREE.Vector3());
+    
+    // offset model inside group
+    clone!.position.sub(center);
+    group.position.set(...pos)
+    group.userData.meta = meta
+    
+    state.scene.add(group);
 }
 
 export const spawnTrash = (state: SceneState) => {
-    const entriesArray = Array.from(state.modelRegisty.values());
+    const entriesArray = Array.from(state.modelRegistySM.values());
     const random = entriesArray[Math.floor(Math.random() * entriesArray.length)];
 
     const clone = random.obj.clone();
@@ -119,7 +301,15 @@ export const spawnTrash = (state: SceneState) => {
         bake: false,
     }
 
-    clone.userData.meta = meta;
-
-    state.scene.add(clone);
+    const group = new THREE.Group();
+    group.add(clone);
+    
+    const box = new THREE.Box3().setFromObject(clone);
+    const center = box.getCenter(new THREE.Vector3());
+    
+    // offset model inside group
+    clone.position.sub(center);
+    group.userData.meta = meta
+    
+    state.scene.add(group);
 }
