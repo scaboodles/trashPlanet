@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { DynamicObj, LoadedObj, loadModels } from './registry';
+import { loadModels, SceneState, spawnTrash } from './registry';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -8,18 +8,17 @@ import { BloomPass } from 'three/addons/postprocessing/BloomPass.js';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
-type SceneState={
-    scene: THREE.Scene;
-    renderer: THREE.WebGLRenderer;
-    modelRegisty: Map<string, LoadedObj>;
-    pointer : THREE.Vector2;
-    camera: THREE.Camera;
-    selectedObject: DynamicObj | null;
-    composer: EffectComposer;
-    outline_pass: OutlinePass;
-}
-
 const raycaster = new THREE.Raycaster();
+
+const setupDragTest = (state: SceneState) => {
+    const geometry = new THREE.SphereGeometry(.5, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.x = 5
+    state.scene.add(sphere);
+    
+    spawnTrash(state);
+}
 
 const init = async () => {
     const scene = new THREE.Scene();
@@ -32,7 +31,6 @@ const init = async () => {
     document.body.appendChild( renderer.domElement );
 
     const modelDict = await loadModels();
-    scene.add(modelDict.get("duck")!.obj);
 
     const temp_sun_loader = new GLTFLoader();
     temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
@@ -132,7 +130,9 @@ const init = async () => {
         composer: composer,
         outline_pass: outlinePass,
     }
+    setupDragTest(state);
 
+    window.addEventListener( 'mousedown', (event) => onclickdown(event, state) );
 
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
 
@@ -140,7 +140,7 @@ const init = async () => {
     //renderer.setAnimationLoop(() => animate(state));
 }
 
-function onPointerMove( event: MouseEvent, state: SceneState ) {
+function onclickdown( event: MouseEvent, state: SceneState ) {
 	// calculate pointer position in normalized device coordinates
 	// (-1 to +1) for both components
 	state.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -168,15 +168,6 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
             state.outline_pass.selectedObjects = [mesh];
         }
     }
-
-    /*if(intersects.length > 0){
-        const mesh = intersects[0].object as THREE.Mesh;
-        if(Array.isArray(mesh.material)){
-            state.outline_pass.selectedObjects = [mesh];
-        }else{
-            state.outline_pass.selectedObjects = [mesh];
-        }
-    }*/
 }
 
 function animate(state: SceneState) {
