@@ -216,8 +216,6 @@ function onclickdown( event: MouseEvent, state: SceneState ) {
 const gui = new GUI();
 gui.add( planet_values, 'mass' ).listen();
 
-//function updateMass(){}
-
 
 function animate(state: SceneState) {
     state.composer.render();
