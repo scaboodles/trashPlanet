@@ -1,13 +1,18 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { DynamicObj, loadModels, SceneState, spawnTrash } from './registry';
-
-
-const getDynamic = (obj: THREE.Object3D, state: SceneState) : DynamicObj => {
-    return state.instancedObjects.filter((dynam) => dynam.obj.id == obj.id)[0];
-}
+import { loadModels, SceneState, spawnTrash } from './registry';
 
 const raycaster = new THREE.Raycaster();
+
+const setupDragTest = (state: SceneState) => {
+    const geometry = new THREE.SphereGeometry(.5, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.x = 5
+    state.scene.add(sphere);
+    
+    spawnTrash(state);
+}
 
 const init = async () => {
     const scene = new THREE.Scene();
@@ -44,8 +49,9 @@ const init = async () => {
         pointer: new THREE.Vector2(),
         camera: camera,
         selectedObject: null,
-        instancedObjects: [],
     }
+
+    setupDragTest(state);
 
     window.addEventListener( 'mousedown', (event) => onclickdown(event, state) );
 
@@ -53,8 +59,6 @@ const init = async () => {
 }
 
 function onclickdown( event: MouseEvent, state: SceneState ) {
-    spawnTrash(state);
-
 	// calculate pointer position in normalized device coordinates
 	// (-1 to +1) for both components
 	state.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -65,7 +69,7 @@ function onclickdown( event: MouseEvent, state: SceneState ) {
 	const intersects = raycaster.intersectObjects( state.scene.children );
 
     if(intersects.length > 0){
-        state.selectedObject = getDynamic(intersects[0].object, state);
+        state.selectedObject = intersects[0].object;
     }
 }
 

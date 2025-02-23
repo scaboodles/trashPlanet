@@ -7,8 +7,7 @@ export type SceneState={
     modelRegisty: Map<string, LoadedObj>;
     pointer : THREE.Vector2;
     camera: THREE.Camera;
-    selectedObject: DynamicObj | null;
-    instancedObjects: DynamicObj[];
+    selectedObject: THREE.Object3D | null;
 }
 
 export type StaticObj = {
@@ -30,6 +29,12 @@ export type DynamicObj = {
 
 }
 
+export type DynamicMetadata = {
+    velocity : THREE.Vector3;
+    bake : boolean;
+    mass : number; // arbitrary mass unit
+}
+
 export const modelRegistry: StaticObj[] = [
     {
         path: "teapot",
@@ -38,7 +43,7 @@ export const modelRegistry: StaticObj[] = [
     },
     {
         path: "duck",
-        mass: 1,
+        mass: 2,
         scale: [.7,.7,.7],
     }
 ]
@@ -75,13 +80,15 @@ export const loadModels = async () : Promise<Map<string, LoadedObj>> => {
 export const spawnTrash = (state: SceneState) => {
     const entriesArray = Array.from(state.modelRegisty.values());
     const random = entriesArray[Math.floor(Math.random() * entriesArray.length)];
-    const dynam: DynamicObj = {
-        obj: random.obj.clone(),
+
+    const clone = random.obj.clone();
+    const meta : DynamicMetadata = {
         mass: random.mass,
+        velocity: new THREE.Vector3(),
         bake: false,
-        velocity: new THREE.Vector3(0,0,0),
     }
 
-    state.instancedObjects.push(dynam);
-    state.scene.add(dynam.obj);
+    clone.userData.meta = meta;
+
+    state.scene.add(clone);
 }
