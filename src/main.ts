@@ -140,6 +140,44 @@ const init = async () => {
     //renderer.setAnimationLoop(() => animate(state));
 }
 
+function onPointerMove( event: MouseEvent, state: SceneState ) {
+	// calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+	state.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	state.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    raycaster.setFromCamera( state.pointer, state.camera );
+    // calculate objects intersecting the picking ray
+    const filtered: THREE.Object3D[] = [];
+    state.scene.children.forEach(child => {
+        if(!child.userData.sun){
+            filtered.push(child)
+        }
+    });
+    
+	const intersects = raycaster.intersectObjects( filtered );
+
+    state.outline_pass.selectedObjects = [];
+
+    if(intersects.length > 0)
+    {
+        const mesh = intersects[0].object;
+        if(!mesh.userData.sun)
+        {
+            state.outline_pass.selectedObjects = [mesh];
+        }
+    }
+
+    /*if(intersects.length > 0){
+        const mesh = intersects[0].object as THREE.Mesh;
+        if(Array.isArray(mesh.material)){
+            state.outline_pass.selectedObjects = [mesh];
+        }else{
+            state.outline_pass.selectedObjects = [mesh];
+        }
+    }*/
+}
+
 function onclickdown( event: MouseEvent, state: SceneState ) {
 	// calculate pointer position in normalized device coordinates
 	// (-1 to +1) for both components
@@ -155,7 +193,6 @@ function onclickdown( event: MouseEvent, state: SceneState ) {
         }
     });
     
-    console.log(filtered)
 	const intersects = raycaster.intersectObjects( filtered );
 
     state.outline_pass.selectedObjects = [];
@@ -171,7 +208,6 @@ function onclickdown( event: MouseEvent, state: SceneState ) {
 }
 
 function animate(state: SceneState) {
-	//state.renderer.render(state.scene, state.camera);
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})
 }

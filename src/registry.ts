@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { EffectComposer, OutlinePass } from 'three/examples/jsm/Addons.js';
 
 export type SceneState={
     scene: THREE.Scene;
@@ -8,6 +9,8 @@ export type SceneState={
     pointer : THREE.Vector2;
     camera: THREE.Camera;
     selectedObject: THREE.Object3D | null;
+    composer: EffectComposer;
+    outline_pass: OutlinePass;
 }
 
 export type StaticObj = {
