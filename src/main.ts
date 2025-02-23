@@ -159,7 +159,9 @@ const init = async () => {
         modelRegistySM: modelDictSM,
         modelRegistyMD: modelDictMD,
         modelRegistyLG: modelDictLG,
-        modelRegistyXLG: modelDictXL
+        modelRegistyXLG: modelDictXL,
+
+        transient: new Set<THREE.Object3D>(),
     }
 
 
@@ -378,6 +380,8 @@ function handle_physics (state: SceneState, delta: number, objects: THREE.Object
         
                     // Update planet radius and planet group
                     state.planet.objects.add(item);
+                    state.transient.delete(item);
+
                     state.planet.mass += item.userData.meta.mass;
 
                     // Three JS doesn't let you make a bounding sphere directly from a group so we have to do this instead :(
@@ -408,41 +412,56 @@ function handle_physics (state: SceneState, delta: number, objects: THREE.Object
 
         if(item.position.length() > clip_radius_multiplier * state.planet.radius) {
             despawned_items.add(item);
+            state.transient.delete(item);
         }
+
+        const scalefac = 50;
         
-        if(state.planet.radius >= 50 && state.globalscale > 1e-5){
-            while(state.planet.radius >= 15){
+        if(state.planet.radius >= scalefac && state.globalscale > 1e-5){
+            while(state.planet.radius >= scalefac){
                 state.globalscale = state.globalscale * .75;
+
                 state.planet.objects.children.forEach(child => {
                     child.scale.multiplyScalar(state.globalscale);
                     child.position.multiplyScalar(state.globalscale); // Adjust position accordingly
-
-                    // also recalculate bounding sphere
-                    let planet_box: THREE.Box3 = new THREE.Box3().setFromObject(state.planet.objects);
-                    let planet_sphere: THREE.Sphere = new THREE.Sphere();
-                    planet_box.getBoundingSphere(planet_sphere);
-                    state.planet.radius = planet_sphere.radius;
                 });
+
+                // also recalculate bounding sphere
+                let planet_box: THREE.Box3 = new THREE.Box3().setFromObject(state.planet.objects);
+                let planet_sphere: THREE.Sphere = new THREE.Sphere();
+                planet_box.getBoundingSphere(planet_sphere);
+                state.planet.radius = planet_sphere.radius;
             }
             ret = true;
 
             state.camera.position.multiplyScalar(state.globalscale);
 
             console.log(`rescale: ${state.globalscale}`);
+            state.modelRegistySM.forEach((child)=>{
+                child.obj.scale.multiplyScalar(state.globalscale);
+            });
+            state.modelRegistyMD.forEach((child)=>{
+                child.obj.scale.multiplyScalar(state.globalscale);
+            });
+            state.modelRegistyLG.forEach((child)=>{
+                child.obj.scale.multiplyScalar(state.globalscale);
+            });
+            state.modelRegistyXLG.forEach((child)=>{
+                child.obj.scale.multiplyScalar(state.globalscale);
+            });
 
             state.controls.maxDistance = state.planet.radius * 3.0;
 
-            state.scene.children.forEach((child) => {
-                const g = getParentGroup(child);
-                if(g && !g.userData.meta.bake){
-                    despawned_items.add(g);
-                }
+            state.transient.forEach((child) => {
+                state.scene.remove(child);
             });
+            state.transient.clear();
         }
     });
 
     despawned_items.forEach((item) => {
         state.scene.remove(item);
+        state.transient.delete(item);
     });
 
     return ret;
