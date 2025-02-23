@@ -7,7 +7,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { getParallaxCorrectNormal } from 'three/tsl';
+import { cameraFar, getParallaxCorrectNormal } from 'three/tsl';
 
 const raycaster = new THREE.Raycaster();
 
@@ -154,7 +154,8 @@ const init = async () => {
         mousedown: false,
         dragTarget: new THREE.Vector3,
         controls: controls,
-
+        
+        globalscale: 1,
         modelRegistySM: modelDictSM,
         modelRegistyMD: modelDictMD,
         modelRegistyLG: modelDictLG,
@@ -314,15 +315,17 @@ function animate(state: SceneState) {
         state.scene.add(prevLine);
         // damp current and add velocity on selected
         const damp = .9;
-        const juice = 100;
+        const juice = 25;
 
         const meta = state.selectedObject.userData.meta;
         meta.velocity.multiplyScalar(damp);
         meta.velocity.addScaledVector(new THREE.Vector3().subVectors(state.dragTarget, state.selectedObject.position), state.time.delta * juice );
     }
 
-    spawn_items(state);
-    handle_physics(state, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
+    const rescaled = handle_physics(state, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
+    if(!rescaled){
+        spawn_items(state);
+    }
 
     //state.planet.objects.rotation.y += 0.5 * state.time.delta;
 
@@ -343,9 +346,10 @@ function spawn_items(state: SceneState)
     }
 }
 
-function handle_physics(state: SceneState, delta: number, objects: THREE.Object3D[])
+function handle_physics (state: SceneState, delta: number, objects: THREE.Object3D[]): boolean 
 {
-    var despawned_items: THREE.Object3D[] = [];
+    let despawned_items: Set<THREE.Object3D> = new Set();
+    let ret = false;
 
     objects.forEach((item) => {
 
@@ -388,10 +392,10 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
         //}
 
         // Get velocity vector pointing from position to origin
-        var grav_vel: THREE.Vector3 = item.position.clone().multiplyScalar(-1.0);
+        var grav_vel: THREE.Vector3 = item.position.clone().multiplyScalar(-1.0 * (1/state.globalscale));
         var grav_dist_sq = grav_vel.lengthSq();
 
-        var grav_strength = (grav_const * item.userData.meta.mass * state.planet.mass) / grav_dist_sq;
+        var grav_strength = (grav_const * item.userData.meta.mass * state.planet.mass * state.globalscale ** 2) / grav_dist_sq;
         grav_vel = grav_vel.normalize().multiplyScalar(grav_strength);
 
         item.userData.meta.velocity.add(grav_vel);
@@ -403,11 +407,43 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
         item.position.add(item.userData.meta.velocity.clone().multiplyScalar(delta));
 
         if(item.position.length() > clip_radius_multiplier * state.planet.radius) {
-            despawned_items.push(item);
+            despawned_items.add(item);
+        }
+        
+        if(state.planet.radius >= 50 && state.globalscale > 1e-5){
+            while(state.planet.radius >= 15){
+                state.globalscale = state.globalscale * .75;
+                state.planet.objects.children.forEach(child => {
+                    child.scale.multiplyScalar(state.globalscale);
+                    child.position.multiplyScalar(state.globalscale); // Adjust position accordingly
+
+                    // also recalculate bounding sphere
+                    let planet_box: THREE.Box3 = new THREE.Box3().setFromObject(state.planet.objects);
+                    let planet_sphere: THREE.Sphere = new THREE.Sphere();
+                    planet_box.getBoundingSphere(planet_sphere);
+                    state.planet.radius = planet_sphere.radius;
+                });
+            }
+            ret = true;
+
+            state.camera.position.multiplyScalar(state.globalscale);
+
+            console.log(`rescale: ${state.globalscale}`);
+
+            state.controls.maxDistance = state.planet.radius * 3.0;
+
+            state.scene.children.forEach((child) => {
+                const g = getParentGroup(child);
+                if(g && !g.userData.meta.bake){
+                    despawned_items.add(g);
+                }
+            });
         }
     });
 
     despawned_items.forEach((item) => {
         state.scene.remove(item);
     });
+
+    return ret;
 }
