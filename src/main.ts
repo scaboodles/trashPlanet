@@ -394,7 +394,7 @@ function handle_physics (state: SceneState, delta: number, objects: THREE.Object
                     // update the radius:
                     let mass_box = document.getElementById("radius_num");
                     if (mass_box != null) {
-                        mass_box.innerHTML = planet_sphere.radius.toFixed(2).toString();
+                        mass_box.innerHTML = (planet_sphere.radius * 1/state.globalscale).toFixed(2).toString();
                     }
 
                     state.controls.maxDistance = planet_sphere.radius * 3.0;
