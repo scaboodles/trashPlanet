@@ -4,11 +4,16 @@ import { loadModels, SceneState, spawnTrash } from './registry';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { BloomPass } from 'three/addons/postprocessing/BloomPass.js';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { GUI } from 'dat.gui'
 
 const raycaster = new THREE.Raycaster();
+
+const planet_values = {
+    mass: 0,
+    gravity: 0,
+}
 
 const setupDragTest = (state: SceneState) => {
     const geometry = new THREE.SphereGeometry(.5, 32, 32);
@@ -16,7 +21,6 @@ const setupDragTest = (state: SceneState) => {
     const sphere = new THREE.Mesh(geometry, material);
     sphere.position.x = 5
     state.scene.add(sphere);
-    
     spawnTrash(state);
 }
 
@@ -109,6 +113,7 @@ const init = async () => {
         usePatternTexture: false
     };
 
+
     outlinePass.edgeStrength = params.edgeStrength;
     outlinePass.edgeGlow = params.edgeGlow;
     outlinePass.visibleEdgeColor.set(0xffffff);
@@ -118,7 +123,6 @@ const init = async () => {
     
     const outputPass = new OutputPass();
     composer.addPass(outputPass);
-
 
     const state: SceneState = {
         scene: scene,
@@ -131,12 +135,14 @@ const init = async () => {
         outline_pass: outlinePass,
     }
     setupDragTest(state);
-
     window.addEventListener( 'mousedown', (event) => onclickdown(event, state) );
 
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
 
+
+
     animate(state);
+    // massController.domElement.style.pointerEvents = 'none';
     //renderer.setAnimationLoop(() => animate(state));
 }
 
@@ -207,9 +213,17 @@ function onclickdown( event: MouseEvent, state: SceneState ) {
     }
 }
 
+const gui = new GUI();
+gui.add( planet_values, 'mass' ).listen();
+
+//function updateMass(){}
+
+
 function animate(state: SceneState) {
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})
 }
+
+
 
 init();
