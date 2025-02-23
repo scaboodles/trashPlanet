@@ -11,6 +11,8 @@ export type SceneState={
     selectedObject: THREE.Object3D | null;
     composer: EffectComposer;
     outline_pass: OutlinePass;
+    mousedown: boolean;
+    dragTarget: THREE.Vector3;
 }
 
 export type StaticObj = {
