@@ -129,12 +129,14 @@ const init = async () => {
         selectedObject: null,
         composer: composer,
         outline_pass: outlinePass,
+        mousedown: false,
+        dragTarget: new THREE.Vector3,
     }
     setupDragTest(state);
 
-    window.addEventListener( 'mousedown', (event) => onclickdown(event, state) );
-
+    window.addEventListener( 'mousedown', (event) => onMouseDown(event, state) );
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
+    window.addEventListener( 'mouseup', (event) => onMouseUp(event, state) );
 
     animate(state);
     //renderer.setAnimationLoop(() => animate(state));
@@ -148,6 +150,53 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
 
     raycaster.setFromCamera( state.pointer, state.camera );
     // calculate objects intersecting the picking ray
+    if(!state.mousedown){
+        const filtered: THREE.Object3D[] = [];
+        state.scene.children.forEach(child => {
+            if(!child.userData.sun){
+                filtered.push(child)
+            }
+        });
+        
+        // outline pass
+        const intersects = raycaster.intersectObjects( filtered );
+
+        state.outline_pass.selectedObjects = [];
+
+        if(intersects.length > 0)
+        {
+            const mesh = intersects[0].object;
+            if(!mesh.userData.sun)
+            {
+                state.outline_pass.selectedObjects = [mesh];
+            }
+        }
+    } else if (state.selectedObject != null){
+        const mid= new THREE.Vector3().addVectors(state.selectedObject.position, new THREE.Vector3(0,0,0)).multiplyScalar(0.5);
+        const normal = new THREE.Vector3();
+        state.camera.getWorldDirection(normal)
+        const plane = new THREE.Plane();
+
+        plane.setFromNormalAndCoplanarPoint(normal, mid);
+
+        raycaster.setFromCamera( state.pointer, state.camera );
+        const intersect = new THREE.Vector3();
+        const hits = raycaster.ray.intersectPlane(plane, intersect);
+        if(hits){
+            state.dragTarget = intersect;
+        }
+    }
+}
+
+function onMouseDown( event: MouseEvent, state: SceneState ) {
+	// calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+    state.mousedown = true;
+	state.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	state.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    raycaster.setFromCamera( state.pointer, state.camera );
+    // calculate objects intersecting the picking ray
     const filtered: THREE.Object3D[] = [];
     state.scene.children.forEach(child => {
         if(!child.userData.sun){
@@ -165,24 +214,15 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
         if(!mesh.userData.sun)
         {
             state.outline_pass.selectedObjects = [mesh];
+            state.selectedObject = mesh;
         }
     }
-
-    /*if(intersects.length > 0){
-        const mesh = intersects[0].object as THREE.Mesh;
-        if(Array.isArray(mesh.material)){
-            state.outline_pass.selectedObjects = [mesh];
-        }else{
-            state.outline_pass.selectedObjects = [mesh];
-        }
-    }*/
 }
 
-function onclickdown( event: MouseEvent, state: SceneState ) {
-	// calculate pointer position in normalized device coordinates
-	// (-1 to +1) for both components
-	state.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	state.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+const onMouseUp = (event: MouseEvent, state: SceneState) => {
+    // reset highlight on mouseup
+    state.mousedown = false; 
+    state.selectedObject = null;
 
     raycaster.setFromCamera( state.pointer, state.camera );
     // calculate objects intersecting the picking ray
@@ -207,7 +247,24 @@ function onclickdown( event: MouseEvent, state: SceneState ) {
     }
 }
 
+let prevLine : THREE.Line | null = null;
+
 function animate(state: SceneState) {
+    if(prevLine != null){
+        state.scene.remove(prevLine);
+        prevLine = null;
+    }
+
+    if(state.selectedObject){
+        // draw line between moving and target
+        const geometry = new THREE.BufferGeometry().setFromPoints([state.selectedObject.position, state.dragTarget]);
+        const material = new THREE.LineBasicMaterial({ color: 0xffffff }); // Blue line
+        const line = new THREE.Line(geometry, material);
+        prevLine = line;
+        state.scene.add(prevLine);
+        //
+    }
+
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})
 }
