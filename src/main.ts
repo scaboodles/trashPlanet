@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-import { loadModelsMed, loadModelsSmall, SceneState, spawnTrash, EngineTime, Planet } from './registry';
+import { loadModelsMed, loadModelsSmall, SceneState, spawnTrash, EngineTime, Planet, loadModelsLarge, loadModelsXLarge } from './registry';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -13,17 +13,6 @@ const raycaster = new THREE.Raycaster();
 const clip_radius = 100.0;
 var time_since_spawn = 0.0;
 var time_to_wait = 1.0;
-
-
-const setupDragTest = (state: SceneState) => {
-    const geometry = new THREE.SphereGeometry(.5, 32, 32);
-    const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-    const sphere = new THREE.Mesh(geometry, material);
-    sphere.position.x = 5
-    state.scene.add(sphere);
-    
-    spawnTrash(state);
-}
 
 const init = async () => {
     const scene = new THREE.Scene();
@@ -37,6 +26,8 @@ const init = async () => {
 
     const modelDictSM = await loadModelsSmall();
     const modelDictMD = await loadModelsMed();
+    const modelDictLG = await loadModelsLarge();
+    const modelDictXL = await loadModelsXLarge();
 
     const temp_sun_loader = new GLTFLoader();
     temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
@@ -133,9 +124,8 @@ const init = async () => {
         previous_time: Date.now()
     }
 
-    var teapot_template = modelDict.get('teapot');
-    var starting_teapot = teapot_template?.obj.clone();
-
+    var teapot_template = modelDictSM.get('teapot');
+    var starting_teapot = teapot_template!.obj.clone();
 
     let planet: Planet = {
         mass: teapot_template?.mass!,
@@ -152,19 +142,20 @@ const init = async () => {
     const state: SceneState = {
         scene: scene,
         renderer: renderer,
-        modelRegistySM: modelDictSM,
-        modelRegistyMD: modelDictMD,
         pointer: new THREE.Vector2(),
         camera: camera,
         selectedObject: null,
         composer: composer,
         outline_pass: outlinePass,
-
         time: engine_time,
-        planet: planet
-
+        planet: planet,
         mousedown: false,
         dragTarget: new THREE.Vector3,
+
+        modelRegistySM: modelDictSM,
+        modelRegistyMD: modelDictMD,
+        modelRegistyLG: modelDictLG,
+        modelRegistyXLG: modelDictXL
     }
 
     window.addEventListener( 'mousedown', (event) => onMouseDown(event, state) );
@@ -173,6 +164,14 @@ const init = async () => {
 
     animate(state);
     //renderer.setAnimationLoop(() => animate(state));
+}
+
+const getParentGroup = (obj: THREE.Object3D) => {
+    if(obj.userData.meta){
+        return obj;
+    }else{
+        return getParentGroup(obj.parent!);
+    }
 }
 
 function onPointerMove( event: MouseEvent, state: SceneState ) {
@@ -201,16 +200,18 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
             const mesh = intersects[0].object;
             if(!mesh.userData.sun)
             {
-                state.outline_pass.selectedObjects = [mesh];
+                state.outline_pass.selectedObjects = [getParentGroup(mesh)];
             }
         }
     } else if (state.selectedObject != null){
-        const mid= new THREE.Vector3().addVectors(state.selectedObject.position, new THREE.Vector3(0,0,0)).multiplyScalar(0.5);
-        const normal = new THREE.Vector3();
-        state.camera.getWorldDirection(normal)
-        const plane = new THREE.Plane();
+        //const mid= new THREE.Vector3().addVectors(state.selectedObject.position, new THREE.Vector3(0,0,0)).multiplyScalar(0.5);
+        //const normal = new THREE.Vector3().subVectors( new THREE.Vector3(0,0,0), state.selectedObject.position).normalize();
 
-        plane.setFromNormalAndCoplanarPoint(normal, mid);
+        const plane = new THREE.Plane();
+        const normal = new THREE.Vector3();
+        state.camera.getWorldDirection(normal);
+
+        plane.setFromNormalAndCoplanarPoint(normal, new THREE.Vector3(0,0,0));
 
         raycaster.setFromCamera( state.pointer, state.camera );
         const intersect = new THREE.Vector3();
@@ -245,8 +246,9 @@ function onMouseDown( event: MouseEvent, state: SceneState ) {
     {
         const mesh = intersects[0].object;
 
-        state.outline_pass.selectedObjects = [mesh];
-        state.selectedObject = mesh;
+        state.outline_pass.selectedObjects = [getParentGroup(mesh)];
+        state.selectedObject = getParentGroup(mesh);
+        state.dragTarget = state.selectedObject.position;
     }
 }
 
@@ -273,20 +275,16 @@ const onMouseUp = (event: MouseEvent, state: SceneState) => {
         const mesh = intersects[0].object;
         if(!mesh.userData.sun)
         {
-            state.outline_pass.selectedObjects = [mesh];
+            state.outline_pass.selectedObjects = [getParentGroup(mesh)];
         }
     }
 }
 
 let prevLine : THREE.Line | null = null;
-
 function animate(state: SceneState) {
     const current_time = Date.now();
     state.time.delta = (current_time - state.time.previous_time) * 0.001;
     state.time.previous_time = current_time;
-
-    spawn_items(state);
-    handle_physics(state, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
 
     if(prevLine != null){
         state.scene.remove(prevLine);
@@ -300,8 +298,17 @@ function animate(state: SceneState) {
         const line = new THREE.Line(geometry, material);
         prevLine = line;
         state.scene.add(prevLine);
-        //
+        // damp current and add velocity on selected
+        const damp = .9;
+        const juice = 100;
+
+        const meta = state.selectedObject.userData.meta;
+        meta.velocity.multiplyScalar(damp);
+        meta.velocity.addScaledVector(new THREE.Vector3().subVectors(state.dragTarget, state.selectedObject.position), state.time.delta * juice );
     }
+
+    spawn_items(state);
+    handle_physics(state, state.time.delta, state.scene.children.filter((child) => { return (child.userData.meta);}));
 
     state.composer.render();
     requestAnimationFrame(() => {animate(state)})

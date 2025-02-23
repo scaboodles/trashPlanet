@@ -286,8 +286,9 @@ export const spawnById = (state: SceneState, registry: Map<string, LoadedObj>, i
 
     const meta : DynamicMetadata = {
         mass: guy!.mass,
-        velocity: new THREE.Vector3(),
+        velocity: new THREE.Vector3(0,0,0),
         bake: false,
+        angular_velocity: new THREE.Vector3(0,0,0)
     }
 
     const group = new THREE.Group();
@@ -307,8 +308,6 @@ export const spawnById = (state: SceneState, registry: Map<string, LoadedObj>, i
 export const spawnTrash = (state: SceneState) => {
     const entriesArray = Array.from(state.modelRegistySM.values());
     const random = entriesArray[Math.floor(Math.random() * entriesArray.length)];
-
-
 
     const clone = random.obj.clone();
     const meta : DynamicMetadata = {
