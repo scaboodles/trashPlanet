@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { loadModelsSmall, SceneState, spawnById} from './registry';
+import { loadModelsLarge, loadModelsMed, loadModelsSmall, loadModelsXLarge, SceneState, spawnById} from './registry';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -18,6 +18,9 @@ const init = async () => {
     document.body.appendChild( renderer.domElement );
 
     const modelDict = await loadModelsSmall();
+    const modelDictMed = await loadModelsMed();
+    const modelDictLG = await loadModelsLarge();
+    const modelDictXL = await loadModelsXLarge();
 
     const temp_sun_loader = new GLTFLoader();
     temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
@@ -110,7 +113,10 @@ const init = async () => {
     const state: SceneState = {
         scene: scene,
         renderer: renderer,
-        modelRegisty: modelDict,
+        modelRegistySM: modelDict,
+        modelRegistyMD: modelDictMed,
+        modelRegistyLG: modelDictLG,
+        modelRegistyXLG: modelDictXL,
         pointer: new THREE.Vector2(),
         camera: camera,
         selectedObject: null,
@@ -120,10 +126,25 @@ const init = async () => {
         dragTarget: new THREE.Vector3,
     }
 
-    spawnById(state, "teapot", [0,0,0]);
-    spawnById(state, "duck", [1,0,0]);
-    spawnById(state, "stapler", [-1,0,0]);
-    spawnById(state, "genie_lamp", [-2,0,0]);
+    spawnById(state, state.modelRegistySM, "teapot", [0,0,0]);
+    spawnById(state, state.modelRegistySM, "duck", [1,0,0]);
+    spawnById(state, state.modelRegistySM, "stapler", [-1,0,0]);
+    spawnById(state, state.modelRegistySM, "genie_lamp", [-2,0,0]);
+    spawnById(state, state.modelRegistySM, "head_from_a_bust_of_hadrian", [-3,0,0]);
+    spawnById(state, state.modelRegistySM, "free_model_old_rusty_frying_pan", [-6,0,0]);
+
+    spawnById(state, state.modelRegistyMD, "ecorche_-_skeleton", [0,0,10]);
+    spawnById(state, state.modelRegistyMD, "russian_stove", [-5,0,10]);
+    spawnById(state, state.modelRegistyMD, "rusty_old_fridge", [-9,0,10]);
+    spawnById(state, state.modelRegistyMD, "retro_display_fridge", [-15,0,10]);
+
+    spawnById(state, state.modelRegistyLG, "road_roller_arp_35", [0,0,25]);
+    spawnById(state, state.modelRegistyLG, "destroyed_bus_01", [-20,0,25]);
+
+    //spawnById(state, state.modelRegistyXLG, "statue_of_liberty", [0,0,-100]);
+    //spawnById(state, state.modelRegistyXLG, "eiffel_tower", [-200,0,-100]);
+    //spawnById(state, state.modelRegistyXLG, "westminster_abbey", [-800,0,-100]);
+
     animate(state);
     //renderer.setAnimationLoop(() => animate(state));
 }

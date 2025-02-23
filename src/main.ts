@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { loadModelsSmall, SceneState, spawnTrash } from './registry';
+import { loadModelsMed, loadModelsSmall, SceneState, spawnTrash } from './registry';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -30,7 +30,8 @@ const init = async () => {
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    const modelDict = await loadModelsSmall();
+    const modelDictSM = await loadModelsSmall();
+    const modelDictMD = await loadModelsMed();
 
     const temp_sun_loader = new GLTFLoader();
     temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
@@ -123,7 +124,8 @@ const init = async () => {
     const state: SceneState = {
         scene: scene,
         renderer: renderer,
-        modelRegisty: modelDict,
+        modelRegistySM: modelDictSM,
+        modelRegistyMD: modelDictMD,
         pointer: new THREE.Vector2(),
         camera: camera,
         selectedObject: null,
