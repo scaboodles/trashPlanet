@@ -88,6 +88,17 @@ export const modelRegistrySmall: StaticObj[] = [
         mass: 4,
         scale: [.1,.1,.1],
     },
+    {
+        path: 'cowboy_hat',
+        mass: .8,
+        scale: [.5,.5,.5],
+    },
+    {
+        path: 'rubber_duck',
+        mass: .3,
+        scale: [.0025,.0025,.0025],
+    },
+
 ]
 
 export const modelRegistryMed: StaticObj[] = [
@@ -112,6 +123,21 @@ export const modelRegistryMed: StaticObj[] = [
         scale:[2.5,2.5,2.5]
     },
     {
+        path: "fridge",
+        mass: 360,
+        scale: [4,4,4]
+    },
+    {
+        path:"old_bicycle",
+        mass: 60,
+        scale: [4,4,4]
+    },
+
+]
+
+
+export const modelRegistryLarge: StaticObj[] = [
+    {
         path: "road_roller_arp_35",
         mass: 250,
         scale: [1.5,1.5,1.5]
@@ -120,12 +146,26 @@ export const modelRegistryMed: StaticObj[] = [
         path: "destroyed_bus_01",
         mass: 1500,
         scale: [2,2,2]
-    }
+    },
+    {
+        path: 'van',
+        mass: 800,
+        scale: [4,4,4]
+    },
+    {
+        path: 'satellite',
+        mass: 3000,
+        scale: [3.5,3.5,3.5]
+    },
+    {
+        path: 'abandonded_roller_coaster_cart',
+        mass: 3000,
+        scale: [1,1,1]
+    },
+
 ]
 
-export const modelRegistryLarge: StaticObj[] = [
-]
-
+// TODO: MOON, NYC, North America, Generic Planet, abandoned roller coaster, generic planet, prehistoric planet, asteriod 
 export const modelRegistryXLarge: StaticObj[] = [
     {
         path: "statue_of_liberty",
@@ -141,6 +181,26 @@ export const modelRegistryXLarge: StaticObj[] = [
         path: "westminster_abbey",
         mass: 1000000,
         scale: [50,50,50]
+    },
+    {
+        path: "new_york_city._manhattan",
+        mass: 10000000,
+        scale: [1,1,1]
+    },
+    {
+        path: "moon",
+        mass: 1000000000,
+        scale: [1,1,1]
+    },
+    {
+        path: "mount_rushmore",
+        mass: 200000,
+        scale: [125,125,125]
+    },
+    {
+        path: "pyramid",
+        mass: 200000,
+        scale: [27,27,27]
     },
 ]
 
