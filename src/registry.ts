@@ -23,6 +23,7 @@ export type SceneState={
     mousedown: boolean;
     dragTarget: THREE.Vector3;
     controls: OrbitControls;
+    globalscale: number;
 }
 export type Planet = {
     mass: number;
@@ -391,11 +392,9 @@ export const spawnTrash = (state: SceneState) => {
         angular_velocity: new THREE.Vector3(Math.random() * 2.0, Math.random() * 2.0, Math.random() * 2.0)
     }
 
-
     const phi = (Math.random() * Math.PI) - (Math.PI / 2);
     const theta = Math.random() * Math.PI * 2;
     const magnitude = (Math.random() * clip_radius_multiplier * state.planet.radius) + (spawn_radius_minimum * state.planet.radius);
-
     const group = new THREE.Group();
     group.add(clone);
     
@@ -404,7 +403,8 @@ export const spawnTrash = (state: SceneState) => {
     
     // offset model inside group
     clone.position.sub(center);
-    
+    group.scale.multiplyScalar(state.globalscale);
+
     group.userData.meta = meta
     group.position.x = magnitude * Math.cos(theta) * Math.cos(phi);
     group.position.y = magnitude * Math.sin(theta) * Math.cos(phi);
@@ -413,6 +413,7 @@ export const spawnTrash = (state: SceneState) => {
     group.rotation.x = Math.random() * 2 * Math.PI;
     group.rotation.y = Math.random() * 2 * Math.PI;
     group.rotation.z = Math.random() * 2 * Math.PI;  
+
   
     state.scene.add(group);
 }
