@@ -24,6 +24,7 @@ export type SceneState={
     dragTarget: THREE.Vector3;
     controls: OrbitControls;
     globalscale: number;
+    transient: Set<THREE.Object3D>
 }
 export type Planet = {
     mass: number;
@@ -421,7 +422,6 @@ export const spawnTrash = (state: SceneState) => {
     
     // offset model inside group
     clone.position.sub(center);
-    group.scale.multiplyScalar(state.globalscale);
 
     group.userData.meta = meta
     group.position.x = magnitude * Math.cos(theta) * Math.cos(phi);
@@ -434,4 +434,5 @@ export const spawnTrash = (state: SceneState) => {
 
   
     state.scene.add(group);
+    state.transient.add(group);
 }
