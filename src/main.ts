@@ -15,6 +15,7 @@ let clip_radius_multiplier = 100.0;
 //let clip_radius = 1.0;
 var time_since_spawn = 0.0;
 var time_to_wait = 1.0;
+let check_radius_multiplier = 1.1;
 
 const grav_const = 6.67428 * 0.000001;
 
@@ -131,7 +132,7 @@ const init = async () => {
     let planet: Planet = {
         mass: teapot_template?.mass!,
         //mass: 100000000,
-        check_radius: 10.0,
+        check_radius: 1.0,
         radius: 1.0,
         objects: new THREE.Group()
     };
@@ -168,6 +169,8 @@ const init = async () => {
     planet_box.getBoundingSphere(planet_sphere);
     state.controls.maxDistance = 3.0 * planet_sphere.radius;
     state.planet.radius = planet_sphere.radius;
+
+    state.planet.check_radius = planet_sphere.radius * check_radius_multiplier;
 
     window.addEventListener( 'mousedown', (event) => onMouseDown(event, state) );
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
@@ -349,8 +352,8 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
 
     objects.forEach((item) => {
 
-        //if(item.position.length() <= state.planet.check_radius)
-        //{
+        if(item.position.length() <= state.planet.check_radius)
+        {
             let item_bbox: THREE.Box3 = new THREE.Box3().setFromObject(item);
             let item_size: THREE.Vector3 = new THREE.Vector3();
             item_bbox.getSize(item_size);
@@ -383,9 +386,10 @@ function handle_physics(state: SceneState, delta: number, objects: THREE.Object3
 
                     state.controls.maxDistance = planet_sphere.radius * 3.0;
                     state.planet.radius = planet_sphere.radius;
+                    state.planet.check_radius = planet_sphere.radius * check_radius_multiplier;
                 }
             });
-        //}
+        }
 
         // Get velocity vector pointing from position to origin
         var grav_vel: THREE.Vector3 = item.position.clone().multiplyScalar(-1.0);
