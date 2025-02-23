@@ -34,6 +34,22 @@ const init = async () => {
     }, undefined, function(error) {
         console.error(error);
     })
+	
+	// Add a glow effect to the sun
+    const glow_map = new THREE.TextureLoader().load( './assets/glow.png' );
+    const alphaTexture = new THREE.TextureLoader().load('./assets/glow.png');
+    const glow_material = new THREE.SpriteMaterial( {
+        map: glow_map,
+        color: 0xffd164,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        alphaMap: alphaTexture
+    } );
+
+    const sprite = new THREE.Sprite( glow_material );
+    sprite.scale.set(100.0, 100.0, 1.0)
+    sprite.position.set(100,0,0);
+    scene.add( sprite );
 
     const cubemap_loader = new THREE.CubeTextureLoader();
     var cubemap = cubemap_loader.load([
