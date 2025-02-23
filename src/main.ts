@@ -7,6 +7,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { getParallaxCorrectNormal } from 'three/tsl';
 
 const raycaster = new THREE.Raycaster();
 
@@ -166,9 +167,11 @@ const init = async () => {
     //renderer.setAnimationLoop(() => animate(state));
 }
 
-const getParentGroup = (obj: THREE.Object3D) => {
+const getParentGroup = (obj: THREE.Object3D) : THREE.Object3D | null => {
     if(obj.userData.meta){
         return obj;
+    }else if(!obj.parent){
+        return null;
     }else{
         return getParentGroup(obj.parent!);
     }
@@ -197,10 +200,10 @@ function onPointerMove( event: MouseEvent, state: SceneState ) {
 
         if(intersects.length > 0)
         {
-            const mesh = intersects[0].object;
-            if(!mesh.userData.sun)
+            const mesh = getParentGroup(intersects[0].object);
+            if(mesh && !mesh.userData.meta.bake)
             {
-                state.outline_pass.selectedObjects = [getParentGroup(mesh)];
+                state.outline_pass.selectedObjects = [mesh];
             }
         }
     } else if (state.selectedObject != null){
@@ -244,11 +247,12 @@ function onMouseDown( event: MouseEvent, state: SceneState ) {
 
     if(intersects.length > 0)
     {
-        const mesh = intersects[0].object;
-
-        state.outline_pass.selectedObjects = [getParentGroup(mesh)];
-        state.selectedObject = getParentGroup(mesh);
-        state.dragTarget = state.selectedObject.position;
+        const mesh = getParentGroup(intersects[0].object);
+        if(mesh && !mesh.userData.meta.bake){
+            state.outline_pass.selectedObjects = [mesh];
+            state.selectedObject = mesh;
+            state.dragTarget = state.selectedObject.position;
+        }
     }
 }
 
@@ -272,10 +276,10 @@ const onMouseUp = (event: MouseEvent, state: SceneState) => {
 
     if(intersects.length > 0)
     {
-        const mesh = intersects[0].object;
-        if(!mesh.userData.sun)
+        const mesh = getParentGroup(intersects[0].object);
+        if(mesh && !mesh.userData.meta.bake)
         {
-            state.outline_pass.selectedObjects = [getParentGroup(mesh)];
+            state.outline_pass.selectedObjects = [mesh];
         }
     }
 }
