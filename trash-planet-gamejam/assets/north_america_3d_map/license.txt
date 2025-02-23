@@ -1,0 +1,11 @@
+Model Information:
+* title:	North America 3D map
+* source:	https://sketchfab.com/3d-models/north-america-3d-map-d55c139774e54037a31048f99b9ce4bb
+* author:	jerryfisher (https://sketchfab.com/jerryfisher)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "North America 3D map" (https://sketchfab.com/3d-models/north-america-3d-map-d55c139774e54037a31048f99b9ce4bb) by jerryfisher (https://sketchfab.com/jerryfisher) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

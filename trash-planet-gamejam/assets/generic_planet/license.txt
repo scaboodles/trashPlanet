@@ -1,0 +1,11 @@
+Model Information:
+* title:	Generic planet
+* source:	https://sketchfab.com/3d-models/generic-planet-ada79081b39047a7870c0b9ec3d158fc
+* author:	Icefyre24 (https://sketchfab.com/Icefyre24)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Generic planet" (https://sketchfab.com/3d-models/generic-planet-ada79081b39047a7870c0b9ec3d158fc) by Icefyre24 (https://sketchfab.com/Icefyre24) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

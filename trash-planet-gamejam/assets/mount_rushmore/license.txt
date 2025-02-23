@@ -1,0 +1,11 @@
+Model Information:
+* title:	Savix - Mount Rushmore
+* source:	https://sketchfab.com/3d-models/savix-mount-rushmore-5218051e6d7a4b90ba77a26ab71132ce
+* author:	akarity (https://sketchfab.com/akarity)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Savix - Mount Rushmore" (https://sketchfab.com/3d-models/savix-mount-rushmore-5218051e6d7a4b90ba77a26ab71132ce) by akarity (https://sketchfab.com/akarity) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

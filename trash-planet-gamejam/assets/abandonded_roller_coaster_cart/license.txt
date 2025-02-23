@@ -1,0 +1,11 @@
+Model Information:
+* title:	Abandonded Roller Coaster Cart
+* source:	https://sketchfab.com/3d-models/abandonded-roller-coaster-cart-e557ecfcacb74d148ca25422d7685331
+* author:	Matt Rafferty (https://sketchfab.com/Matt-AeroLab)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Abandonded Roller Coaster Cart" (https://sketchfab.com/3d-models/abandonded-roller-coaster-cart-e557ecfcacb74d148ca25422d7685331) by Matt Rafferty (https://sketchfab.com/Matt-AeroLab) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

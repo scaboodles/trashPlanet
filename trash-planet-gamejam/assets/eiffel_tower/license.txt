@@ -1,0 +1,11 @@
+Model Information:
+* title:	Eiffel Tower
+* source:	https://sketchfab.com/3d-models/eiffel-tower-6830e60d2c1048f2a33e92679664f652
+* author:	Johnson Martin (https://sketchfab.com/Johnson-Martin)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Eiffel Tower" (https://sketchfab.com/3d-models/eiffel-tower-6830e60d2c1048f2a33e92679664f652) by Johnson Martin (https://sketchfab.com/Johnson-Martin) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

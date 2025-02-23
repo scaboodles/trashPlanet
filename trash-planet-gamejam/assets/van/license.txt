@@ -1,0 +1,11 @@
+Model Information:
+* title:	Old Van - Graffiti Challenge (Sketchfab)
+* source:	https://sketchfab.com/3d-models/old-van-graffiti-challenge-sketchfab-6e9e89cfb5f845c68ffaacb9659b0235
+* author:	Warkarma (https://sketchfab.com/warkarma)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Old Van - Graffiti Challenge (Sketchfab)" (https://sketchfab.com/3d-models/old-van-graffiti-challenge-sketchfab-6e9e89cfb5f845c68ffaacb9659b0235) by Warkarma (https://sketchfab.com/warkarma) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

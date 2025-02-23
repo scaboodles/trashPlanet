@@ -1,0 +1,11 @@
+Model Information:
+* title:	Utah teapot
+* source:	https://sketchfab.com/3d-models/utah-teapot-92f31e2028244c4b8ef6cbc07738aee5
+* author:	Michael (https://sketchfab.com/michaelkolesidis)
+
+Model License:
+* license type:	CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions can not be distributed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Utah teapot" (https://sketchfab.com/3d-models/utah-teapot-92f31e2028244c4b8ef6cbc07738aee5) by Michael (https://sketchfab.com/michaelkolesidis) licensed under CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)

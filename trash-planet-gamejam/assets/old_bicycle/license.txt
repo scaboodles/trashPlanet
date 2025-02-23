@@ -1,0 +1,8 @@
+Model Information:
+* title:	Old Bicycle
+* source:	https://sketchfab.com/3d-models/old-bicycle-29b644ad4b6d4d4a92bb5f61766f669c
+* author:	CharlesNG (https://sketchfab.com/CharlesNG)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
