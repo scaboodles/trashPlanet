@@ -1,0 +1,513 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 9818,
+      "max": [
+        4.4416913986206055,
+        77.056884765625,
+        5.263774871826172
+      ],
+      "min": [
+        -6.692690849304199,
+        35.96208953857422,
+        -9.806808471679688
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 117816,
+      "componentType": 5126,
+      "count": 9818,
+      "max": [
+        0.9999989867210388,
+        1.0,
+        0.9999998211860657
+      ],
+      "min": [
+        -0.9999994039535522,
+        -1.0,
+        -0.9999995827674866
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 9818,
+      "max": [
+        0.9999791383743286,
+        0.9999991655349731,
+        0.9999414086341858,
+        1.0
+      ],
+      "min": [
+        -0.9999979138374329,
+        -0.9999953508377075,
+        -0.9999997019767761,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 9818,
+      "max": [
+        0.9974627494812012,
+        0.9980858564376831
+      ],
+      "min": [
+        0.0004994869232177734,
+        0.0007682144641876221
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 42969,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 235632,
+      "componentType": 5126,
+      "count": 11723,
+      "max": [
+        3.840089797973633,
+        68.73799896240234,
+        5.171599388122559
+      ],
+      "min": [
+        -6.177479267120361,
+        37.218833923339844,
+        -6.2845048904418945
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 376308,
+      "componentType": 5126,
+      "count": 11723,
+      "max": [
+        0.9999895095825195,
+        1.0,
+        0.9998506903648376
+      ],
+      "min": [
+        -0.9999749660491943,
+        -1.0,
+        -0.9999845027923584
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 157088,
+      "componentType": 5126,
+      "count": 11723,
+      "max": [
+        0.9999986886978149,
+        0.9998631477355957,
+        0.9999721646308899,
+        1.0
+      ],
+      "min": [
+        -0.9999265074729919,
+        -0.9728824496269226,
+        -0.9998734593391418,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 78544,
+      "componentType": 5126,
+      "count": 11723,
+      "max": [
+        0.9970399737358093,
+        0.9980400204658508
+      ],
+      "min": [
+        0.0019499999471008778,
+        0.0019499999471008778
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 171876,
+      "componentType": 5125,
+      "count": 66228,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 516984,
+      "componentType": 5126,
+      "count": 13436,
+      "max": [
+        5.2100934982299805,
+        81.6312255859375,
+        4.329510688781738
+      ],
+      "min": [
+        1.7372081279754639,
+        72.13047790527344,
+        1.3568942546844482
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 678216,
+      "componentType": 5126,
+      "count": 13436,
+      "max": [
+        0.9999982714653015,
+        1.0,
+        0.9999980330467224
+      ],
+      "min": [
+        -0.9999982118606567,
+        -1.0,
+        -0.9999980330467224
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 344656,
+      "componentType": 5126,
+      "count": 13436,
+      "max": [
+        0.9998815655708313,
+        0.998062014579773,
+        0.9999908804893494,
+        1.0
+      ],
+      "min": [
+        -0.9999991059303284,
+        -0.9980252981185913,
+        -0.9999880194664001,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 172328,
+      "componentType": 5126,
+      "count": 13436,
+      "max": [
+        0.4722576141357422,
+        0.9974005222320557
+      ],
+      "min": [
+        0.00414431095123291,
+        0.10407564043998718
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 436788,
+      "componentType": 5125,
+      "count": 61596,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "Gravity Jack (https://sketchfab.com/gravityjack)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/statue-of-liberty-84094e8d5e724b5c882cf576ca12e44e",
+      "title": "Statue Of Liberty"
+    },
+    "generator": "Sketchfab-12.68.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 683172,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 279816,
+      "byteOffset": 683172,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 839448,
+      "byteOffset": 962988,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 559632,
+      "byteOffset": 1802436,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 2362068,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Liberty_MAT_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/Liberty_MAT_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/Liberty_MAT_normal.jpeg"
+    },
+    {
+      "uri": "textures/RobesMAT_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/RobesMAT_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/RobesMAT_normal.jpeg"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Liberty_MAT",
+      "normalTexture": {
+        "index": 2
+      },
+      "occlusionTexture": {
+        "index": 1
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.6236661585365854,
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    },
+    {
+      "name": "RobesMAT",
+      "normalTexture": {
+        "index": 5
+      },
+      "occlusionTexture": {
+        "index": 4
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicRoughnessTexture": {
+          "index": 4
+        },
+        "roughnessFactor": 0.9207483815999999
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Statue_Liberty_MAT_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Statue_RobesMAT_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TANGENT": 7,
+            "TEXCOORD_0": 8
+          },
+          "indices": 9,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Torch_Liberty_MAT_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 11,
+            "POSITION": 10,
+            "TANGENT": 12,
+            "TEXCOORD_0": 13
+          },
+          "indices": 14,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "b833ab7ccd7044bb9654468296ea9fe2.fbx"
+    },
+    {
+      "children": [
+        3,
+        7
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "StatueOfLiberty2"
+    },
+    {
+      "children": [
+        5,
+        6
+      ],
+      "name": "Statue"
+    },
+    {
+      "mesh": 0,
+      "name": "Statue_Liberty_MAT_0"
+    },
+    {
+      "mesh": 1,
+      "name": "Statue_RobesMAT_0"
+    },
+    {
+      "children": [
+        8
+      ],
+      "name": "Torch"
+    },
+    {
+      "mesh": 2,
+      "name": "Torch_Liberty_MAT_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    },
+    {
+      "sampler": 0,
+      "source": 3
+    },
+    {
+      "sampler": 0,
+      "source": 4
+    },
+    {
+      "sampler": 0,
+      "source": 5
+    }
+  ]
+}

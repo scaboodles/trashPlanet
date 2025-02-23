@@ -1,0 +1,11 @@
+Model Information:
+* title:	Ecorche - Skeleton
+* source:	https://sketchfab.com/3d-models/ecorche-skeleton-294352f068e04a8f8c44d5e3d7eaef3d
+* author:	VeryCrunchyTaco (https://sketchfab.com/VeryCrunchyTaco)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Ecorche - Skeleton" (https://sketchfab.com/3d-models/ecorche-skeleton-294352f068e04a8f8c44d5e3d7eaef3d) by VeryCrunchyTaco (https://sketchfab.com/VeryCrunchyTaco) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

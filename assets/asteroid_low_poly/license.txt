@@ -1,0 +1,11 @@
+Model Information:
+* title:	Asteroid low poly
+* source:	https://sketchfab.com/3d-models/asteroid-low-poly-9a43ef48a70647188576ccb5987b7e64
+* author:	pasquill (https://sketchfab.com/pasquill)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Asteroid low poly" (https://sketchfab.com/3d-models/asteroid-low-poly-9a43ef48a70647188576ccb5987b7e64) by pasquill (https://sketchfab.com/pasquill) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

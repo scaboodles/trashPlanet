@@ -1,0 +1,11 @@
+Model Information:
+* title:	Statue Of Liberty
+* source:	https://sketchfab.com/3d-models/statue-of-liberty-84094e8d5e724b5c882cf576ca12e44e
+* author:	Gravity Jack (https://sketchfab.com/gravityjack)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Statue Of Liberty" (https://sketchfab.com/3d-models/statue-of-liberty-84094e8d5e724b5c882cf576ca12e44e) by Gravity Jack (https://sketchfab.com/gravityjack) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Rusty Old Fridge
+* source:	https://sketchfab.com/3d-models/rusty-old-fridge-3fa1ee3896144e989bdaf3b31070561b
+* author:	DonislavTodorov (https://sketchfab.com/DonislavTodorov)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Rusty Old Fridge" (https://sketchfab.com/3d-models/rusty-old-fridge-3fa1ee3896144e989bdaf3b31070561b) by DonislavTodorov (https://sketchfab.com/DonislavTodorov) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

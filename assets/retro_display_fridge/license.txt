@@ -1,0 +1,11 @@
+Model Information:
+* title:	Retro Display Fridge
+* source:	https://sketchfab.com/3d-models/retro-display-fridge-02db5309fbb24c3888841b483c85f485
+* author:	GameDev Nick (https://sketchfab.com/GameDevNick)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Retro Display Fridge" (https://sketchfab.com/3d-models/retro-display-fridge-02db5309fbb24c3888841b483c85f485) by GameDev Nick (https://sketchfab.com/GameDevNick) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
