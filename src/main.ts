@@ -34,6 +34,31 @@ const init = async () => {
     const modelDict = await loadModels();
     scene.add(modelDict.get("duck")!.obj);
 
+    const temp_sun_loader = new GLTFLoader();
+    temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
+        gltf.scene.userData.sun = true;
+        gltf.scene.position.set(100.0, 0.0, 0.0);
+        scene.add(gltf.scene);
+    }, undefined, function(error) {
+        console.error(error);
+    })
+	
+	// Add a glow effect to the sun
+    const glow_map = new THREE.TextureLoader().load( './assets/glow.png' );
+    const alphaTexture = new THREE.TextureLoader().load('./assets/glow.png');
+    const glow_material = new THREE.SpriteMaterial( {
+        map: glow_map,
+        color: 0xffd164,
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        alphaMap: alphaTexture
+    } );
+
+    const sprite = new THREE.Sprite( glow_material );
+    sprite.scale.set(100.0, 100.0, 1.0)
+    sprite.position.set(100,0,0);
+    scene.add( sprite );
+
     const cubemap_loader = new THREE.CubeTextureLoader();
     var cubemap = cubemap_loader.load([
         '../assets/skybox/right.png',
@@ -108,15 +133,6 @@ const init = async () => {
         outline_pass: outlinePass,
     }
 
-
-    const temp_sun_loader = new GLTFLoader();
-    temp_sun_loader.load('../assets/the_star_sun/scene.gltf', function(gltf) {
-        gltf.scene.position.set(100.0, 0.0, 0.0);
-        gltf.scene.userData.sun = true;
-        scene.add(gltf.scene);
-    }, undefined, function(error) {
-        console.error(error);
-    })
 
     window.addEventListener( 'mousemove', (event) => onPointerMove(event, state) );
 
