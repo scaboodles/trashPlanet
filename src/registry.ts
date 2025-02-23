@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { EffectComposer, OutlinePass } from 'three/examples/jsm/Addons.js';
-const clip_radius = 100.0;
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+const clip_radius_multiplier = 100.0;
+const spawn_radius_minimum = 1.1;
 
 export type SceneState={
     scene: THREE.Scene;
@@ -19,9 +22,11 @@ export type SceneState={
     planet: Planet;
     mousedown: boolean;
     dragTarget: THREE.Vector3;
+    controls: OrbitControls;
 }
 export type Planet = {
     mass: number;
+    radius: number;
     check_radius: number;
     objects: THREE.Group;
 };
@@ -320,7 +325,7 @@ export const spawnTrash = (state: SceneState) => {
 
     const phi = (Math.random() * Math.PI) - (Math.PI / 2);
     const theta = Math.random() * Math.PI * 2;
-    const magnitude = Math.random() * clip_radius;
+    const magnitude = (Math.random() * clip_radius_multiplier * state.planet.radius) + (spawn_radius_minimum * state.planet.radius);
 
     const group = new THREE.Group();
     group.add(clone);
